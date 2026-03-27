@@ -15,6 +15,8 @@ pub use acceleration_motor::acceleration_motor::ServoErrors;
 pub use ir_sensor::irsensor::IRSensor;
 
 // forgot to implement this one 
-// pub use turning_motor::
+pub use turning_motor::TurningMotor;
 
 pub use analogdevicecontroller::AnalogDeviceController;
+
+

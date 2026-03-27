@@ -26,7 +26,8 @@ pub struct AccelerationMotor {
 
 #[derive(Debug)]
 pub enum ServoErrors {
-    DisallowedPort
+    DisallowedPort,
+    OutOfBoundsAngle,
 }
 
 impl AccelerationMotor {
