@@ -1,6 +1,6 @@
 
-pub mod reciever;
-pub mod sender;
+mod reciever;
+mod sender;
 
 pub use reciever::radio::Radio as RecieverRadio;
 pub use sender::radio::Radio as SenderRadio;

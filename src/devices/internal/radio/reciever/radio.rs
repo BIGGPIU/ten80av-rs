@@ -11,7 +11,13 @@ use core::fmt::Write;
 pub enum RadioError {
     Timeout,
     /// If you're a slave/master and you try to do something only a master/slave can do
-    InvalidStatus
+    InvalidStatus,
+    /// an error you should expect honestly, just means that the first 3 bytes read are not the bytes that you set as your password
+    IncorrectPassword,
+    /// If the wrong CRC is found. This still returns the message in case you may want to read it 
+    ModifiedMessage([u8;16]),
+    /// If the message is shorter than expecteds
+    BadMessageLength
 }
 
 pub struct Radio<'a> {
@@ -113,12 +119,20 @@ impl Radio<'_> {
 
     }
 
-    pub fn read(&mut self,timer: &mut Timer<TIMER0>,serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) -> Result<Packet, RadioError> {
+    /// Attempt to read 16 bytes from the radio. The length is not affected by the password
+    /// 
+    /// Heres an example of what a sample packret looks like for you visual learners out there
+    /// 
+    /// | 0             | 1             | 2             | 3..18   |
+    /// | ------------- | ------------- | ------------- | ------- |
+    /// | Password Byte | Password Byte | Password Byte | Message |
+    pub fn read(&mut self,timer: &mut Timer<TIMER0>,serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) -> Result<[u8;16], RadioError> {
         Serial::write(serial,"Attempting to read a broadcasted message to serial monitor", crate::utils::serial::MessageSeverity::INFORMATIVE);
-        let mut packet = Packet::new();
+        let mut packet: Packet = Packet::new();
         let wrong_crc:bool;
 
 
+        // try to recieve a packet 
         match self.controller.recv_timeout(&mut packet, timer, self.timeout) {
             Ok(_x) => {
                 wrong_crc = false;  
@@ -138,35 +152,100 @@ impl Radio<'_> {
 
         if wrong_crc {
             Serial::write(serial,"Radio Packet may have been modified", crate::utils::serial::MessageSeverity::Warning);
-            Serial::write(serial,"Reading Radio Packet to Serial", crate::utils::serial::MessageSeverity::INFORMATIVE);
+            Serial::write(serial,"Reading Radio Packet to Buffer", crate::utils::serial::MessageSeverity::INFORMATIVE);
             // write!(serial, "! Packet may have been modified. Packet:").unwrap();
 
             match self.password {
                 Some(password) => {
-                    let p = 0_usize;
-                    for i in packet.iter() {
-                        if p != 3 && i == &password[p] {
-
-                        }  
-                    }
+                    return Radio::read_message_with_password(password, packet,true);
                 },
                 None => {
-
+                    return Radio::read_message_with_no_password(packet,true);
                 },
             }
         }
         else {
             // write!(serial, "Packet:").unwrap();
-            Serial::write(serial,"Reading Radio Packet to Serial", crate::utils::serial::MessageSeverity::INFORMATIVE);
-            for i in packet.iter() {
-                write!(serial, " {:?} ",i ).unwrap();
+            Serial::write(serial,"Reading Radio Packet to Buffer", crate::utils::serial::MessageSeverity::INFORMATIVE);
+            match self.password {
+                Some(password) => {
+                    return Radio::read_message_with_password(password, packet, false);
+                }
+                None => {
+                    return Radio::read_message_with_no_password(packet, false);
+                }
             }
         }
 
 
-        Ok(todo!())
     }
 
+    fn read_message_with_no_password(packet:Packet,bad_crc:bool) -> Result<[u8;16], RadioError> {
+        let mut message_buf = [245;16];
+
+
+        let mut packet_iter = packet.iter();
+
+        for i in 0..16 {
+            let message = match packet_iter.next() {
+                Some(x) => x,
+                None => {
+                    return Err(RadioError::BadMessageLength)
+                },
+            };
+
+            message_buf[i] = *message;
+        }
+
+        if bad_crc {
+            return Err(RadioError::ModifiedMessage(message_buf))
+        }
+        else {
+            return Ok(message_buf)
+        }
+    }
+
+    fn read_message_with_password(password:[u8;3],packet:Packet,bad_crc:bool) -> Result<[u8;16], RadioError>{
+        let mut message_buf = [245;16];
+
+
+        let mut packet_iter = packet.iter();
+        
+        // check to see if the password bytes are right
+        for p in 0..3 {
+            let m = match packet_iter.next() {
+                Some(x) => x,
+                None => {
+                    return Err(RadioError::BadMessageLength)
+                },
+            };
+
+            if m == &password[p] {
+                continue;
+            } 
+            else {
+                return Err(RadioError::IncorrectPassword)
+            }
+        }
+
+        for i in 0..16 {
+            let message = match packet_iter.next() {
+                Some(x) => x,
+                None => {
+                    return Err(RadioError::BadMessageLength)
+                },
+            };
+
+            message_buf[i] = *message;
+        }
+
+        if bad_crc {
+            return Err(RadioError::ModifiedMessage(message_buf))
+        }
+        else {
+            return Ok(message_buf)
+        }
+    }
 
     /// # Preface
     /// Microbit radios communicate using the IEEE 802.15.4 standard they dont use any sort of identification when messages are sent

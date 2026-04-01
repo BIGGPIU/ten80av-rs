@@ -89,6 +89,6 @@ impl Serial {
 
     /// clears the terminal by sending a ton of newlines
     pub fn clear_terminal(serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) {
-        write!(serial,"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n").unwrap();
+        write!(serial,"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n").unwrap();
     }
 }

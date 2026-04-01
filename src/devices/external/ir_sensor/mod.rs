@@ -1,1 +1,4 @@
-pub mod irsensor;
+mod irsensor;
+
+
+pub use irsensor::IRSensor;

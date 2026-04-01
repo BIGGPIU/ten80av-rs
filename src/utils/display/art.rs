@@ -1,4 +1,12 @@
 // numbers 
+    pub const ZERO: [[u8;5];5] = [
+        [0, 1, 1, 1, 0],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [0, 1, 1, 1, 0],
+    ];
+
     pub const THREE: [[u8;5];5] = [
         [0, 0, 1, 1, 1],
         [0, 0, 0, 0, 1],
@@ -346,6 +354,16 @@ pub fn get_display_letter_from_char(c:char) -> [[u8;5];5] {
         'y' => LED_Y,
         'z' => LED_Z,
         ' ' => BLANK,
+        '1' => ONE,
+        '2' => TWO,
+        '3' => THREE,
+        '4' => FOUR,
+        '5' => FIVE,
+        '6' => SIX,
+        '7' => THINGAFTERSIX,
+        '8' => EIGHT,
+        '9' => NINE,
+        '0' => ZERO,
         _ => WARNING
         
     };

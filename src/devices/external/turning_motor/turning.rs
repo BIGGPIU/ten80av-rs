@@ -78,4 +78,9 @@ impl TurningMotor {
     pub fn raw_change_servo_angle(&mut self, servo_motor_controller: &mut ServoMotorController,value:u16) {
         servo_motor_controller.controller.set_channel_on_off(self.channel, 0, value).unwrap();
     }
+
+    /// resets the servo to a neutral direction
+    pub fn reset_direction(&mut self, servo_motor_controller: &mut ServoMotorController) {
+        servo_motor_controller.controller.set_channel_on_off(self.channel, 0, 200).unwrap();
+    }   
 }

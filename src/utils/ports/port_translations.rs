@@ -38,7 +38,7 @@ pub enum MicrotbitDriverPorts {
     /// Reverse Port: Enabled ✅
     /// 
     /// 
-    /// Read the fucking manual for more info: https://dfimg.dfrobot.com/wiki/17542/DFR0548_gravity-hr8833-motor-and-servo-driver-expansion-board_schematics_v1.zip
+    /// Read the fucking manual for more info: <https://dfimg.dfrobot.com/wiki/17542/DFR0548_gravity-hr8833-motor-and-servo-driver-expansion-board_schematics_v1.zip>
     M1,
     /// This device works by changing the state of the motor depending on which combination of ports are enabled.
     /// 
@@ -65,7 +65,7 @@ pub enum MicrotbitDriverPorts {
     /// Reverse Port: Enabled ✅
     /// 
     /// 
-    /// Read the fucking manual for more info: https://dfimg.dfrobot.com/wiki/17542/DFR0548_gravity-hr8833-motor-and-servo-driver-expansion-board_schematics_v1.zip
+    /// Read the fucking manual for more info: <https://dfimg.dfrobot.com/wiki/17542/DFR0548_gravity-hr8833-motor-and-servo-driver-expansion-board_schematics_v1.zip>
     M2,
     /// This device works by changing the state of the motor depending on which combination of ports are enabled.
     /// 
@@ -92,7 +92,7 @@ pub enum MicrotbitDriverPorts {
     /// Reverse Port: Enabled ✅
     /// 
     /// 
-    /// Read the fucking manual for more info: https://dfimg.dfrobot.com/wiki/17542/DFR0548_gravity-hr8833-motor-and-servo-driver-expansion-board_schematics_v1.zip
+    /// Read the fucking manual for more info: <https://dfimg.dfrobot.com/wiki/17542/DFR0548_gravity-hr8833-motor-and-servo-driver-expansion-board_schematics_v1.zip>
     M3,
     /// This device works by changing the state of the motor depending on which combination of ports are enabled.
     /// 
@@ -119,7 +119,7 @@ pub enum MicrotbitDriverPorts {
     /// Reverse Port: Enabled ✅
     /// 
     /// 
-    /// Read the fucking manual for more info: https://dfimg.dfrobot.com/wiki/17542/DFR0548_gravity-hr8833-motor-and-servo-driver-expansion-board_schematics_v1.zip
+    /// Read the fucking manual for more info: <https://dfimg.dfrobot.com/wiki/17542/DFR0548_gravity-hr8833-motor-and-servo-driver-expansion-board_schematics_v1.zip>
     M4,
 
     // I'm documentation-sexual
@@ -189,7 +189,7 @@ impl MicrotbitDriverPorts {
 /// Reverse Port: Enabled ✅
 /// 
 /// 
-/// Read the fucking manual for more info: https://dfimg.dfrobot.com/wiki/17542/DFR0548_gravity-hr8833-motor-and-servo-driver-expansion-board_schematics_v1.zip
+/// Read the fucking manual for more info: <https://dfimg.dfrobot.com/wiki/17542/DFR0548_gravity-hr8833-motor-and-servo-driver-expansion-board_schematics_v1.zip>
 pub struct MotorPort {
     pub forward_port: Channel,
     pub reverse_port: Channel
