@@ -68,11 +68,15 @@ impl ServoMotorController {
 
         match pwm.enable() {
             Ok(_) => {
-
+                crate::utils::serial::Serial::write(serial, "Successfully started Servo Driver", crate::utils::serial::MessageSeverity::OK);
+                return ServoMotorController {
+                    controller: pwm 
+                }
             },
             Err(_e) => {
                     // let _ = write!(serial,"unable to enable pwm device: \n \n Erorr Code:  {e:?} \r\n");
-                    crate::utils::serial::Serial::write(serial,"unable to enable Servo PWM Device.", crate::utils::serial::MessageSeverity::Error);
+                    crate::utils::serial::Serial::write(serial,"unable to enable Servo PWM Device. Aborting.", crate::utils::serial::MessageSeverity::Error);
+                    panic!()
             },
         };
         // pwm.set_channel_on(pwm_pca9685::Channel::All, 0).unwrap();
@@ -80,10 +84,6 @@ impl ServoMotorController {
 
         // return Servos { turning_motor, acceleration_motor }
 
-        crate::utils::serial::Serial::write(serial, "Successfully started Servo Driver", crate::utils::serial::MessageSeverity::OK);
-        return ServoMotorController {
-            controller: pwm 
-        }
 
     }
 

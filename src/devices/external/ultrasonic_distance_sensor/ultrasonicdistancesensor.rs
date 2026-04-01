@@ -23,7 +23,7 @@ pub struct UltraSonicDistanceSensor {
 impl UltraSonicDistanceSensor {
     /// creates a new SensorController
     /// 
-    /// The blocking_action_timeout argument specifies how long the controller should wait
+    /// The blocking_action_timeout argument specifies how long the controller should wait in microseconds
     /// before giving up on reading/writing data. This is to prevent random freezes
     pub fn new(
         echo_pin:microbit::hal::gpio::Pin<Input<PullUp>>,
