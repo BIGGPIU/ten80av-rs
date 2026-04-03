@@ -1,8 +1,8 @@
 mod onboardsensorcontroller;
-mod radio;
+mod speaker;
 mod magnometer;
 
 
 pub use onboardsensorcontroller::OnboardSensorController;
 pub use magnometer::Magnometer;
-pub use radio::*;
+pub use speaker::Speaker;

@@ -87,6 +87,11 @@ impl Serial {
         }
     }
 
+    /// write but for people who like there to be as little arguments as possible 
+    pub fn write_info(serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>, message:&str) {
+        write!(serial, "[INFO] {message:?}\r\n").unwrap();
+    }
+
     /// clears the terminal by sending a ton of newlines
     pub fn clear_terminal(serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) {
         write!(serial,"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n").unwrap();
