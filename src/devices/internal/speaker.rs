@@ -2,10 +2,6 @@ use embedded_hal::{delay::DelayNs, digital::OutputPin};
 use microbit::{hal::Timer, pac::TIMER0};
 use micromath::F32Ext;
 
-use core::fmt::Write;
-
-use crate::utils::serial::Serial;
-
 /// Interface for Speakers/Buzzers, Compatible with the speaker onboard the Micro:Bit
 pub struct Speaker {
     speaker_pin:microbit::hal::gpio::Pin<microbit::hal::gpio::Output<microbit::hal::gpio::PushPull>>

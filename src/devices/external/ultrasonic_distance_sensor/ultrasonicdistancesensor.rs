@@ -3,7 +3,6 @@
 
 use embedded_hal::{delay::DelayNs, digital::{InputPin, OutputPin}};
 use microbit::{hal::{ Timer, gpio::{Input, Output, PullUp, PushPull}}, pac::{TIMER0}};
-use core::fmt::Write;
 
 use crate::utils::serial::Serial;
 
@@ -79,7 +78,7 @@ impl UltraSonicDistanceSensor {
 
         let pulse_width = match self.wait_for_echo_end(timer) {
             Ok(x) => x,
-            Err(e) => { 
+            Err(_e) => { 
                 return Err(UltrasonicDistanceSensorError::Timeout)
             },
         };
@@ -93,7 +92,7 @@ impl UltraSonicDistanceSensor {
 
         let _echo_start = match self.wait_for_echo_start(timer) {
             Ok(x) => x,
-            Err(e) => {
+            Err(_e) => {
                 return Err(UltrasonicDistanceSensorError::Timeout)
             },
         };

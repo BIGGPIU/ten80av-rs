@@ -1,11 +1,12 @@
 use core::ptr::addr_of_mut;
 use core::fmt;
-use microbit::{board, hal::uarte::{self, Error, Instance, Uarte, UarteRx, UarteTx}, pac::{UART0, UARTE0}};
+use microbit::{hal::uarte::{self, Error, Instance, Uarte, UarteRx, UarteTx}, pac::{UARTE0}};
 use core::fmt::Write;
 
 static mut TX_BUF:[u8;1] = [0;1];
 static mut RX_BUF:[u8;1] = [0;1];
 
+#[allow(unused)]
 /// Raw serial monitor interface
 pub struct UartePort<T:Instance>(UarteTx<T>,UarteRx<T>);
 

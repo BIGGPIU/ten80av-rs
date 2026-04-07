@@ -6,7 +6,6 @@ use pwm_pca9685::{Channel};
 
 use crate::utils::ports::*;
 use crate::devices::external::{ServoErrors, ServoMotorController};
-use crate::utils::serial::Serial;
 // use crate::error_handler::ServoErrors;
 
 
