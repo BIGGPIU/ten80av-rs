@@ -1,5 +1,8 @@
 [package]
 name = "ten80av-rs"
+authors = ["Diya Shakoor", "Calvert Cruisers Ten80 Team"]
+description = "A modular library for programming Ten80 Autonomous Vehicles."
+documentation = "https://github.com/BIGGPIU/ten80av-rs"
 version = "0.1.0"
 edition = "2024"
 
