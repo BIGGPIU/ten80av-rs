@@ -5,7 +5,9 @@ description = "A modular library for programming Ten80 Autonomous Vehicles."
 repository = "https://github.com/BIGGPIU/ten80av-rs"
 license = "GPL-3.0"
 keywords = ["robitics", "ten80"]
-version = "0.1.0"
+homepage = "https://github.com/BIGGPIU/ten80av-rs"
+readme = "README.md"
+version = "1.0.0"
 edition = "2024"
 
 [dependencies]
