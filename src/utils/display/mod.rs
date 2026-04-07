@@ -1,6 +1,6 @@
-/// random letters, numbers and symbols for the display
+//! A collection of random letters, numbers, symbols and functions that make it easier to display content to the 5x5 display.
+
 pub mod art;
-/// functions that make it easier to display stuff to the 5x5 led display
 mod display_functions;
 
 

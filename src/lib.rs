@@ -10,13 +10,36 @@
 //! **Currently, only the Microbit:V2 is supported**
 //! 
 //! # Overview
-//! This crate has two main modules ```devices``` and ```utils```
+//! This crate has two main modules [`devices`] and [`utils`]
 //! * [`devices`] houses the internal and external sesnors and motors on (and outside) the micro:bit
-//!     * [`devices::internal`] internal sensors like: [`devices::internal::RecieverRadio`], [`devices::internal::Magnometer`]
-//!     * [`devices::external`] external sensors and motors, like your [`devices::external::TurningMotor`], [`devices::external::AccelerationMotor`], [`devices::external::UltraSonicDistanceSensor`], and your [`devices::external::IRSensor`]
+//!     * [`devices::internal`] has internal sensors like: [`devices::internal::radio`], [`devices::internal::Magnometer`]
+//!     * [`devices::external`] has external sensors and motors, like your [`devices::external::TurningMotor`], [`devices::external::AccelerationMotor`], [`devices::external::UltraSonicDistanceSensor`], and your [`devices::external::IRSensor`]
 //! * [`utils`] has some functions and structures that exist to make it easier to develop for your microbit without having a couple datasheets opened on another monitor.
 //!     * [`utils::ports`] will be your best friend
 //! 
+//! # Using External and Internal Controllers at the same time
+//!
+//! When looking at this crate something might stick out: "[`devices::internal::OnboardSensorController`] cannot be used at the same as external device controllers like [`devices::external::ServoMotorController`]"
+//! This can be a cause for concern because its not impossible to want to use both an external motor and the internal Magnometer at the same time.
+//! 
+//! Because both of the controllers use Board.TWIM0 its impossible for both of them to exist at the same time. Though there is a workaround: We can pass around Board.TWIM0 as 
+//! its needed. [`devices::internal::OnboardSensorController::into_servo_motor_controller`] does this for you. 
+//! 
+//! Unfortunately this does create code thats more verbose but its necessary to create code that compiles
+//! 
+//! Generally: instaead of getting your i2c pins and controllers as they're needed. They should be taken somewhere near the top of your main function
+//! ```rust
+//! #[cortext_m_rt::entry]
+//! fn main_fn() {
+//! let mut board = Board::take().unwrap();
+//! 
+//! // now we can lend out and take back our i2c pins and controllers whenever they're needed
+//! let mut i2c_internal:microbit::hal::twim::Pins = board.i2c_internal.into();
+//! let mut i2c_external:microbit::hal::twim::Pins = board.i2c_external.into(); 
+//! let mut servo_controller:ten80av_rs::devices::external::ServoMotorController;
+//! let mut onboard_sensor_controller:ten80av_rs::devices::internal::OnboardSensorController;
+//! }
+//! ```
 //! 
 //! # Examples
 //! 
@@ -186,7 +209,7 @@
 //!         if time_elapsed == NOTE_ON_MS[ptr] {
 //!             let duration_ms = NOTE_OFF_MS[ptr] - NOTE_ON_MS[ptr];
 //!             let duration_us = duration_ms * 1000;
-//!             speaker_driver.play_tune_midi_note(&mut serial, &mut timer, NOTE_NUM[ptr], duration_us/2);
+//!             speaker_driver.play_tune_midi_note(&mut timer, NOTE_NUM[ptr], duration_us/2);
 //!             
 //!             time_elapsed += duration_ms;
 //!             ptr += 1;

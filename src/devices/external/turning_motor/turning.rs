@@ -1,5 +1,5 @@
 //! Module for controlling the motor that controls turning the autonomous vehicle
-//! servo documentation: https://d3if9wubzr0anm.cloudfront.net/pds/2213210-1.pdf
+//! servo documentation: <https://d3if9wubzr0anm.cloudfront.net/pds/2213210-1.pdf>
 
 
 use pwm_pca9685::{Channel};
@@ -14,6 +14,8 @@ use crate::utils::serial::Serial;
 
 
 #[derive(Debug)]
+/// Interface for External Turning Servos 
+/// 
 /// 0 deg at pwm_on 200
 /// 
 /// max at 600
@@ -74,7 +76,7 @@ impl TurningMotor {
     /// 
     /// Neutral value: 200
     /// 
-    /// Read the documentation about the motor here: https://d3if9wubzr0anm.cloudfront.net/pds/2213210-1.pdf
+    /// Read the documentation about the motor here: <https://d3if9wubzr0anm.cloudfront.net/pds/2213210-1.pdf>
     pub fn raw_change_servo_angle(&mut self, servo_motor_controller: &mut ServoMotorController,value:u16) {
         servo_motor_controller.controller.set_channel_on_off(self.channel, 0, value).unwrap();
     }

@@ -13,6 +13,8 @@ pub enum MotorState {
     Brake
 }
 
+/// Interface for External Acceleration Motors
+/// 
 /// Motor Max: 4095
 /// Motor min: 0
 /// Motor Center: 4095/2
@@ -87,6 +89,15 @@ impl AccelerationMotor {
         self.write_to_motor_chip(servo_motor_controller);
     }
 
+    pub fn brake(&mut self, servo_motor_controller: &mut crate::devices::external::servomotorcontroller::ServoMotorController) {
+        self.state = MotorState::Brake;
+        self.write_to_motor_chip(servo_motor_controller);
+    }
+
+    pub fn forward(&mut self, servo_motor_controller: &mut crate::devices::external::servomotorcontroller::ServoMotorController) {
+        self.state = MotorState::Forward;
+        self.write_to_motor_chip(servo_motor_controller);
+    }
     
 
 

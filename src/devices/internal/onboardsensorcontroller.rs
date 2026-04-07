@@ -4,7 +4,7 @@ use microbit::{hal::{Timer, Twim}, pac::{TIMER0, TWIM0}};
 use crate::utils::serial::Serial;
 
 
-
+/// Controller for Onboard Sensors
 pub struct OnboardSensorController {
     pub controller:Lsm303agr<lsm303agr::interface::I2cInterface<Twim<TWIM0>>, lsm303agr::mode::MagOneShot>
 }
@@ -37,6 +37,33 @@ impl OnboardSensorController {
 
 
         Serial::write(serial,"Successfully Started Magnometer/Accelerometer", crate::utils::serial::MessageSeverity::OK);
+
+        Self { controller: sensor }
+    }
+
+    /// (if you're confused just call .into on the on board_internal_i2c_pins)
+    pub fn new_nolog(
+        board_twim0:microbit::pac::TWIM0,
+        i2c_internal_pins:microbit::hal::twim::Pins,
+        timer: &mut Timer<TIMER0>
+    ) -> Self {
+
+        let i2c_twim = microbit::hal::Twim::new(
+            board_twim0,
+            i2c_internal_pins.into(),
+            microbit::hal::twim::Frequency::K100
+        );
+
+        
+
+        let mut sensor: Lsm303agr<lsm303agr::interface::I2cInterface<Twim<TWIM0>>, lsm303agr::mode::MagOneShot> = Lsm303agr::new_with_i2c(i2c_twim);
+        sensor.init().unwrap();
+        
+        sensor.set_accel_mode_and_odr(timer, lsm303agr::AccelMode::Normal, AccelOutputDataRate::Hz50 ).unwrap();
+        sensor.set_mag_mode_and_odr(timer, lsm303agr::MagMode::HighResolution, lsm303agr::MagOutputDataRate::Hz50).unwrap();
+
+
+       
 
         Self { controller: sensor }
     }

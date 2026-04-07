@@ -20,6 +20,7 @@ pub enum RadioError {
     BadMessageLength
 }
 
+/// Reciever Radio For the Micro:bit V2
 pub struct Radio<'a> {
     controller:microbit::hal::ieee802154::Radio<'a>,
     password:Option<[u8;3]>,
@@ -68,6 +69,32 @@ impl Radio<'_> {
         return Radio { controller:  radio, timeout, password: None};
     }
 
+    /// Initialize the radio.
+    /// 
+    /// The arguments are as follows: (
+    ///     
+    /// board_radio: From Board.RADIO,
+    ///     
+    /// clocks: Reference from Board.CLOCKS,
+    ///     
+    /// channel: What channel you want the radio to listen in on
+    ///     
+    /// timeout: How long IN MICROSECONDS do you want to wait to recieve something 
+    /// 
+    /// )
+    pub fn new_nolog<'a>(
+        board_radio:microbit::pac::RADIO,
+        clocks:&'a Clocks<ExternalOscillator, microbit::hal::clocks::Internal, microbit::hal::clocks::LfOscStopped>,
+        channel:ieee802154::Channel,
+        timeout:u32
+    ) -> crate::devices::internal::radio::reciever::radio::Radio<'a> {  
+
+        let mut radio: microbit::hal::ieee802154::Radio<'a> = microbit::hal::ieee802154::Radio::init(board_radio, &clocks);
+        
+        radio.set_channel(channel);
+  
+        return Radio { controller:  radio, timeout, password: None};
+    }
 
     /// tries to read a radio packet and writes it to the serial monitor 
     /// 

@@ -1,5 +1,6 @@
 use crate::devices::internal::onboardsensorcontroller::OnboardSensorController;
 
+/// Interface for the Magnometer Onboard the Micro:Bit V2
 pub struct Magnometer {
 
 }

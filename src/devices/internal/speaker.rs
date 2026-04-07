@@ -6,6 +6,7 @@ use core::fmt::Write;
 
 use crate::utils::serial::Serial;
 
+/// Interface for Speakers/Buzzers, Compatible with the speaker onboard the Micro:Bit
 pub struct Speaker {
     speaker_pin:microbit::hal::gpio::Pin<microbit::hal::gpio::Output<microbit::hal::gpio::PushPull>>
 }
@@ -24,7 +25,7 @@ impl Speaker {
 
 
     // useful resource I think: https://www.phys.unsw.edu.au/jw/notes.html
-    pub fn play_tune(&mut self,serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>, timer: &mut Timer<TIMER0>,frequency_hz:f64, duration_us:u32) {
+    pub fn play_frequency(&mut self, timer: &mut Timer<TIMER0>,frequency_hz:f64, duration_us:u32) {
         let period_ms:f64 = (1.0/frequency_hz)*1000.0;
 
         let microsecond_period = period_ms * 1000.0;
@@ -42,7 +43,7 @@ impl Speaker {
     }
 
 
-    pub fn play_tune_midi_note(&mut self, serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>, timer: &mut Timer<TIMER0>,midi_note:u8,duration_us:u32) {
+    pub fn play_midi_note(&mut self, timer: &mut Timer<TIMER0>,midi_note:u8,duration_us:u32) {
         
         let tuning = 440.0/32.0;
         

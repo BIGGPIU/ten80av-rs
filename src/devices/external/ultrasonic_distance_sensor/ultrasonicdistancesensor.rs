@@ -12,6 +12,7 @@ pub enum UltrasonicDistanceSensorError {
     Unknown(&'static str),
 }
 
+/// Interface for an hcsr04 Ultrasonic Distance Sensor 
 pub struct UltraSonicDistanceSensor {   
     echo_pin:microbit::hal::gpio::Pin<Input<PullUp>>,
     trigger_pin:microbit::hal::gpio::Pin<Output<PushPull>>,
@@ -42,13 +43,30 @@ impl UltraSonicDistanceSensor {
             max_timeout
         };
 
-        Serial::write(serial, "Successfully Started Ultrasonic Distance Sensor", crate::utils::serial::MessageSeverity::OK);
+        return x;
+    }
+
+    /// creates a new SensorController
+    /// 
+    /// The blocking_action_timeout argument specifies how long the controller should wait in microseconds
+    /// before giving up on reading/writing data. This is to prevent random freezes
+    pub fn new_nolog(
+        echo_pin:microbit::hal::gpio::Pin<Input<PullUp>>,
+        trigger_pin:microbit::hal::gpio::Pin<Output<PushPull>>,
+        max_timeout:u32,
+    ) -> UltraSonicDistanceSensor {
+        let x =  UltraSonicDistanceSensor {
+            echo_pin,
+            trigger_pin,
+            max_timeout
+        };
+
         return x;
     }    
 
 
 
-    pub fn measure_raw(&mut self, timer:&mut Timer<TIMER0>,serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) -> Result<u32,UltrasonicDistanceSensorError> {
+    pub fn measure_raw(&mut self, timer:&mut Timer<TIMER0>) -> Result<u32,UltrasonicDistanceSensorError> {
         self.send_trigger_pulse(timer);
 
         let _echo_start = match self.wait_for_echo_start(timer) {
@@ -70,7 +88,7 @@ impl UltraSonicDistanceSensor {
 
     }
 
-    pub fn measure(&mut self, timer:&mut Timer<TIMER0>,serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) -> Result<f32,UltrasonicDistanceSensorError> {
+    pub fn measure(&mut self, timer:&mut Timer<TIMER0>) -> Result<f32,UltrasonicDistanceSensorError> {
         self.send_trigger_pulse(timer);
 
         let _echo_start = match self.wait_for_echo_start(timer) {

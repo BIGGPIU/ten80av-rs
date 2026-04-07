@@ -1,11 +1,12 @@
 use core::ptr::addr_of_mut;
 use core::fmt;
-use microbit::hal::uarte::{Error, Instance, Uarte, UarteRx, UarteTx};
+use microbit::{board, hal::uarte::{self, Error, Instance, Uarte, UarteRx, UarteTx}, pac::{UART0, UARTE0}};
 use core::fmt::Write;
 
 static mut TX_BUF:[u8;1] = [0;1];
 static mut RX_BUF:[u8;1] = [0;1];
 
+/// Raw serial monitor interface
 pub struct UartePort<T:Instance>(UarteTx<T>,UarteRx<T>);
 
 impl<T:Instance> UartePort<T> {
@@ -52,11 +53,13 @@ impl<T: Instance> embedded_io::Write for UartePort<T> {
 
 
 
+/// Functions For Initializing and interacting with the Serial Monitor
 pub struct Serial {
 
 }
 
 
+/// How severe is the message you're writing
 pub enum MessageSeverity {
     /// for when you're writing to the console just to write to the console
     INFORMATIVE,
@@ -95,5 +98,16 @@ impl Serial {
     /// clears the terminal by sending a ton of newlines
     pub fn clear_terminal(serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) {
         write!(serial,"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n").unwrap();
+    }
+
+    #[inline]
+    /// inline function that quickly sets up the serial monitor
+    pub fn setup(board_uarte:UARTE0,uart_pin:microbit::board::UartPins) -> crate::utils::serial::UartePort<microbit::pac::UARTE0> {
+        UartePort::new(Uarte::new(
+            board_uarte,
+            uart_pin.into(),
+            uarte::Parity::EXCLUDED,
+            uarte::Baudrate::BAUD115200
+        ))
     }
 }

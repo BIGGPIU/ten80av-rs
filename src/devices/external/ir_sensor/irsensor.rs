@@ -2,6 +2,7 @@ use microbit::hal::saadc::Channel;
 
 use crate::utils::serial::Serial;
 
+/// Controller for External IR Sensors
 pub struct IRSensor<T>
 where T: microbit::hal::saadc::Channel
 {
@@ -23,6 +24,17 @@ impl<T:Channel> IRSensor<T> {
     ) -> Self {
         Serial::write(serial, "Starting IR Sensor", crate::utils::serial::MessageSeverity::INFORMATIVE);
 
+        return Self {
+            channel:output_port,
+            offset
+        }
+    }
+
+    pub fn new_nolog(
+        output_port:T,
+        offset:i16,
+    ) -> Self {
+        
         return Self {
             channel:output_port,
             offset
