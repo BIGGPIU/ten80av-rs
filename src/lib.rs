@@ -168,7 +168,7 @@
 //!     let mut turning_motor = match ten80av_rs::devices::external::TurningMotor::new(ten80av_rs::utils::ports::MicrotbitDriverPorts::M1) {
 //!         Ok(x) => x,
 //!         Err(_) => {
-//!             ten80av_rs::utils::serial::Serial::write(serial, "Cannot servo motor with Motor Ports.",MessageSeverity::Error);
+//!             ten80av_rs::utils::serial::Serial::write(serial, "Cannot start servo motor with Motor Ports.",MessageSeverity::Error);
 //!         }    
 //!     }
 //! }
