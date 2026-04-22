@@ -182,6 +182,55 @@ fn main() {
     // > 2 
     // > 3
     // > 4
-
 }
+```
+
+
+## Conditionals 
+### If Else statements
+```rust
+# #[derive(PartialEq)]
+pub enum SuperBool {
+    TRUE,
+    FALSE,
+    UNSURE,
+}
+fn main() {
+    let x = SuperBool::TRUE;
+
+    if x == SuperBool::TRUE {
+        println!("Superbool is true");
+    }
+    else if x == SuperBool::FALSE {
+        println!("Superbool is false");
+    }
+    else {
+        println!("Superbool is... unsure");
+    }
+} 
+```
+### Match statements 
+```rust
+# #[derive(PartialEq)]
+pub enum SuperBool {
+    TRUE,
+    FALSE,
+    UNSURE,
+}
+fn main() {
+    let x = SuperBool::TRUE;
+
+    match x {
+        SuperBool::TRUE => {
+            println!("Superbool is true");
+        },
+        SuperBool::FALSE => {
+            println!("Superbool is false");
+        },
+        SuperBool::UNSURE => {
+            println!("Superbool is... unsure");
+        }
+
+    }
+} 
 ```
