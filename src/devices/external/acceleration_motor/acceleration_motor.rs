@@ -64,14 +64,39 @@ impl AccelerationMotor {
 
     /// change the state of the motor
     /// 
-    /// hover over MicrotbitDriverPorts::MX for more info
+    /// This function works by changing the state of the motor depending on which combination of ports are enabled.
+    /// 
+    /// The documentation describes it as such:
+    /// 
+    /// ## Moving Forward:
+    /// Forward Port: Enabled ✅
+    /// 
+    /// Reverse Port: Disabled ❎
+    /// 
+    /// ## Reversing:
+    /// Forward Port: Disabled ❎
+    /// 
+    /// Reverse Port: Enabled ✅
+    /// 
+    /// ## Coasting / Fast Decay
+    /// Forward Port: Disabled ❎
+    /// 
+    /// Reverse Port: Disabled ❎
+    /// 
+    /// ## Brake / Slow Decay
+    /// Forward Port: Enabled ✅
+    /// 
+    /// Reverse Port: Enabled ✅
+    /// 
+    /// 
+    /// Read the fucking manual for more info: <https://dfimg.dfrobot.com/wiki/17542/DFR0548_gravity-hr8833-motor-and-servo-driver-expansion-board_schematics_v1.zip>
     pub fn change_state(&mut self, servo_motor_controller: &mut crate::devices::external::servomotorcontroller::ServoMotorController,new_state:MotorState) {
         self.state = new_state;
         self.write_to_motor_chip(servo_motor_controller);
     }
 
 
-    /// debugging only 
+    /// logging version of change_state
     pub fn paranoid_change_state(&mut self, servo_motor_controller: &mut crate::devices::external::servomotorcontroller::ServoMotorController,new_state:MotorState, serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) {
         self.state = new_state;
         self.write_to_motor_chip_logging(servo_motor_controller,serial);
@@ -89,11 +114,19 @@ impl AccelerationMotor {
         self.write_to_motor_chip(servo_motor_controller);
     }
 
+    /// Same as 
+    /// ```rust
+    /// &self.change_state(servo_motor_controller,MotorState::Brake);
+    /// ```
     pub fn brake(&mut self, servo_motor_controller: &mut crate::devices::external::servomotorcontroller::ServoMotorController) {
         self.state = MotorState::Brake;
         self.write_to_motor_chip(servo_motor_controller);
     }
 
+    /// Same as 
+    /// ```rust
+    /// &self.change_state(servo_motor_controller,MotorState::Forward);
+    /// ```
     pub fn forward(&mut self, servo_motor_controller: &mut crate::devices::external::servomotorcontroller::ServoMotorController) {
         self.state = MotorState::Forward;
         self.write_to_motor_chip(servo_motor_controller);

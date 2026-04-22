@@ -17,6 +17,7 @@ impl<T:Channel> IRSensor<T> {
 
 
 
+    /// Make a new IR Sensor 
     pub fn new(
         output_port:T,
         offset:i16,
@@ -30,6 +31,7 @@ impl<T:Channel> IRSensor<T> {
         }
     }
 
+    // Make a new IR Sensor
     pub fn new_nolog(
         output_port:T,
         offset:i16,
@@ -44,7 +46,13 @@ impl<T:Channel> IRSensor<T> {
 
 
 
+    /// Measure the raw value of the IR Sensor minus the offset
     pub fn measure(&mut self, controller: &mut crate::devices::external::analogdevicecontroller::AnalogDeviceController) -> i16{
         controller.controller.read_channel(&mut self.channel).unwrap() - self.offset
+    }
+
+    /// Measure the raw value of the IR sensor
+    pub fn measure_no_offset(&mut self, controller: &mut crate::devices::external::analogdevicecontroller::AnalogDeviceController) -> i16{
+        controller.controller.read_channel(&mut self.channel).unwrap()
     }
 }

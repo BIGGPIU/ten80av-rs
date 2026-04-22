@@ -21,9 +21,9 @@ pub struct UltraSonicDistanceSensor {
 
 
 impl UltraSonicDistanceSensor {
-    /// creates a new SensorController
+    /// creates a new UltrasonicDistanceSensor
     /// 
-    /// The blocking_action_timeout argument specifies how long the controller should wait in microseconds
+    /// The max_timeout argument specifies how long the controller should wait in microseconds
     /// before giving up on reading/writing data. This is to prevent random freezes
     pub fn new(
         echo_pin:microbit::hal::gpio::Pin<Input<PullUp>>,
@@ -45,9 +45,9 @@ impl UltraSonicDistanceSensor {
         return x;
     }
 
-    /// creates a new SensorController
+    /// creates a new UltrasonicDistanceSensor
     /// 
-    /// The blocking_action_timeout argument specifies how long the controller should wait in microseconds
+    /// The max_timeout argument specifies how long the controller should wait in microseconds
     /// before giving up on reading/writing data. This is to prevent random freezes
     pub fn new_nolog(
         echo_pin:microbit::hal::gpio::Pin<Input<PullUp>>,
@@ -65,6 +65,7 @@ impl UltraSonicDistanceSensor {
 
 
 
+    /// Measure the amount of time its takes for the UltraSonicDistanceSensor to detect an object
     pub fn measure_raw(&mut self, timer:&mut Timer<TIMER0>) -> Result<u32,UltrasonicDistanceSensorError> {
         self.send_trigger_pulse(timer);
 
@@ -87,6 +88,7 @@ impl UltraSonicDistanceSensor {
 
     }
 
+    // Measure the distance the object is away from the UltrasonicDistanceSensor in centimeters 
     pub fn measure(&mut self, timer:&mut Timer<TIMER0>) -> Result<f32,UltrasonicDistanceSensorError> {
         self.send_trigger_pulse(timer);
 

@@ -298,10 +298,13 @@ impl Radio<'_> {
         self.password = Some(pass);
     }
 
+    /// Stop using the previously set password
     pub fn disable_password(&mut self) {
         self.password = None;
     }
 
+
+    /// Set the amount of time to wait before giving up
     pub fn set_timeout(&mut self, new_timeout:u32) {
         self.timeout = new_timeout;
     }

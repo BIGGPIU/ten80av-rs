@@ -12,7 +12,9 @@ pub struct OnboardSensorController {
 
 impl OnboardSensorController {
 
-    /// (if you're confused just call .into on the on board_internal_i2c_pins)
+    /// Create a new onboard sensor controller
+    /// 
+    /// (if you're confused on how to get the i2c internal pins just call .into on the on board_internal_i2c_pins)
     pub fn new(
         board_twim0:microbit::pac::TWIM0,
         i2c_internal_pins:microbit::hal::twim::Pins,

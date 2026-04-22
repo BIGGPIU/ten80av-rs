@@ -14,6 +14,13 @@ impl AnalogDeviceController {
 
 
 
+    /// Create a new Analog Device Controller.
+    /// 
+    /// This requires the on board SAADC peripheral which can be gotten with 
+    /// ```rust
+    /// let saadc_config = SaadcConfig::default();
+    /// let mut saadc = Saadc::new(board.ADC, saadc_config);
+    /// ```
     pub fn new(
         saadc:Saadc,
         serial: &mut crate::utils::serial::UartePort<microbit::pac::UARTE0>,
@@ -25,6 +32,14 @@ impl AnalogDeviceController {
         }
     }
 
+
+    /// Create a new Analog Device Controller.
+    /// 
+    /// This requires the on board SAADC peripheral which can be gotten with 
+    /// ```rust
+    /// let saadc_config = SaadcConfig::default();
+    /// let mut saadc = Saadc::new(board.ADC, saadc_config);
+    /// ```
     pub fn new_nolog(
         saadc:Saadc,
     ) -> AnalogDeviceController {

@@ -57,20 +57,6 @@ impl TurningMotor {
         })
     }
 
-    /// takes a value between -45 and 45  
-    /// then tells the servo to go to that angle 
-    // pub fn change_servo_angle(&mut self,servo_motor_controller: &mut ServoMotorController, deg:i8) -> Result<(),ServoErrors> {
-    //     if deg.abs() > 45 {
-    //         return Err(ServoErrors::OutOfBoundsAngle)
-    //     }
-
-    //     let new_pwm_value = (deg as i16).map_range(-45..45, 150..600) as u16;
-
-    //     servo_motor_controller.controller.set_channel_on_off(self.channel, 0, new_pwm_value).unwrap();
-
-    //     Ok(())
-    // }
-
     /// change a servo angle when you have a specific PWM value you want to set it to
     /// 
     /// Neutral value: 200

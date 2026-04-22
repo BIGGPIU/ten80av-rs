@@ -1,12 +1,20 @@
-use embedded_hal::{delay::DelayNs, digital::OutputPin};
+use embedded_hal::{delay::DelayNs, digital::{OutputPin, StatefulOutputPin}};
 use microbit::{hal::Timer, pac::TIMER0};
 use micromath::F32Ext;
 
 /// Interface for Speakers/Buzzers, Compatible with the speaker onboard the Micro:Bit
 pub struct Speaker {
-    speaker_pin:microbit::hal::gpio::Pin<microbit::hal::gpio::Output<microbit::hal::gpio::PushPull>>
-}
+    speaker_pin:microbit::hal::gpio::Pin<microbit::hal::gpio::Output<microbit::hal::gpio::PushPull>>,
+    
+    /// should this speaker even be on in the first place
+    pub(crate) on_flag:bool,
+    /// what is the maximum amount of time you want time_until_switch_us
+    /// to be set to?  
+    pub(crate) current_max_time_on:u32,
+    /// constantly mutating time saying how much time you have left until you toggle the switch
+    pub(crate) time_until_switch_us:u32,
 
+}
 
 
 impl Speaker {
@@ -16,7 +24,7 @@ impl Speaker {
     pub fn new(
         speaker_pin:microbit::hal::gpio::Pin<microbit::hal::gpio::Output<microbit::hal::gpio::PushPull>>
     ) -> Speaker {
-        return Speaker { speaker_pin }
+        return Speaker { speaker_pin, on_flag: false, current_max_time_on: 0, time_until_switch_us: 0  }
     }
 
 
@@ -62,4 +70,14 @@ impl Speaker {
             time_elapsed_us += u32microsecond_period;
         }
     }
+
+    pub (crate) fn inverse_speaker(&mut self) {
+        self.speaker_pin.toggle();
+    }
+
+    pub (crate) fn disable_speaker(&mut self) {
+        self.speaker_pin.set_low();
+    }
 }
+
+

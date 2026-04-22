@@ -10,6 +10,7 @@ impl Magnometer {
 
 
 
+    /// Read the raw input from the onboard Magnometer
     pub fn read_magnometer(controller:&mut  OnboardSensorController) -> Option<(i16, i16, i16)> {
         match controller.controller.magnetic_field() {
             Ok(x) => {

@@ -18,7 +18,7 @@ impl ServoMotorController {
 
     /// takes the microbits I2C interface in exchange for the Motors 
     /// 
-    /// (if you're confused just call .into on the on board_external_i2c_pins)
+    /// (if you're confused on how to get the board external pins just call .into on the on board_external_i2c_pins)
     /// 
     /// Returns the motor controller struct 
     pub fn new(
@@ -89,7 +89,7 @@ impl ServoMotorController {
 
     /// takes the microbits I2C interface in exchange for the Motors 
     /// 
-    /// (if you're confused just call .into on the on board_external_i2c_pins)
+    /// (if you're confused on how to get the board external pins just call .into on the on board_external_i2c_pins)
     /// 
     /// Returns the motor controller struct 
     pub fn new_nolog(
