@@ -1,5 +1,6 @@
 use embedded_hal::{delay::DelayNs, digital::{OutputPin, StatefulOutputPin}};
 use microbit::{hal::Timer, pac::TIMER0};
+// todo: make micromath apart of a speaker feature because I only use it once
 use micromath::F32Ext;
 
 /// Interface for Speakers/Buzzers, Compatible with the speaker onboard the Micro:Bit

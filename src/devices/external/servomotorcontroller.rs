@@ -1,6 +1,6 @@
 use microbit::hal::twim::Frequency;
 use microbit::pac::TIMER0;
-use pwm_pca9685::{self, Address, Pca9685};
+use pwm_pca9685::{Address, Pca9685};
 use microbit::hal::{Timer, Twim};
 
 
@@ -8,7 +8,7 @@ use microbit::hal::{Timer, Twim};
 
 /// Controller for External Motors 
 pub struct ServoMotorController {
-    pub controller: Pca9685<Twim<microbit::pac::TWIM0>>
+    pub(crate) controller: Pca9685<Twim<microbit::pac::TWIM0>>
 }
 
 

@@ -108,7 +108,7 @@ impl SampleStruct {
 ### Create a function that cannot be called from extenral files
 ```
 impl <struct name> {
-    fn <function_name>(arg_1:<type>,arg_2:<type>) -> <return _type> {
+    fn <function_name>(arg_1:<type>,arg_2:<type>) -> <return_type> {
 
         return <return_type> 
         OR

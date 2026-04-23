@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Ten80 Autonomous Vehicle Book</title>
+        <title>Writing your Autonomous Vehicle Library - Ten80 Autonomous Vehicle Book</title>
 
 
         <!-- Custom HTML head -->
@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-d4f5601a.js";
+            window.path_to_searchindex_js = "../searchindex-8b5412ce.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-b678102e.js"></script>
+        <script src="../toc-cd16dc78.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -174,72 +174,18 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>In this book you will learn how to program your own library to power your Autonomous Vehicle provided by Ten80 using Rust. This book was written to be useful for people with some non embedded rust experience as well as people who have no rust experience at all.</p>
-<blockquote class="blockquote-tag blockquote-tag-important">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
-<p>This book assumes you are using the Micro:Bit V2 and the Driver Expansion Board</p>
-</blockquote>
-<h2 id="what-you-will-learn"><a class="header" href="#what-you-will-learn">What you will learn</a></h2>
-<p>In this book we will go over:</p>
-<ul>
-<li>
-<p>The basics of Rust</p>
-</li>
-<li>
-<p>The basics of Embedded Develpoment using Rust</p>
-</li>
-<li>
-<p>How to write rust code that works in no standard library (no_std) environments</p>
-</li>
-</ul>
-<h2 id="what-you-will-not-learn"><a class="header" href="#what-you-will-not-learn">What you will <em>NOT</em> learn</a></h2>
-<p>This book will not go over things like:</p>
-<ul>
-<li>
-<p>The absolute basics of programming. This book assumes that you have some experience in programming in languages aside from rust.</p>
-</li>
-<li>
-<p>How to write Generic code that works on microcontrollers other than the Micro:Bit</p>
-</li>
-<li>
-<p>Multitasking &amp; Interrupts</p>
-</li>
-<li>
-<p>Circuits and Electronics. This book will only go into enough for you to understand how to program your AV</p>
-</li>
-<li>
-<p>How to create programs to complete competition challenges</p>
-</li>
-<li>
-<p>How to use rust in non embedded environments</p>
-</li>
-</ul>
-<h2 id="why-you-should-use-rust-for-your-autonomous-vehicle"><a class="header" href="#why-you-should-use-rust-for-your-autonomous-vehicle">Why you should use rust for your Autonomous Vehicle</a></h2>
-<ul>
-<li>
-<p><strong>Rust is Decentralized</strong> - If the Micro:Bit website were to shut down tomorrow your JavaScript or MakeCode would stop working. If you were to write your entire project in rust then no matter what happens to the people who make the Micro:Bit, your code will still be able to be used.</p>
-</li>
-<li>
-<p><strong>Rust is Used In Real Life Embedded Programming</strong> - Rust is becoming more and more popular among companies as the programming language of choice for embedded systems. Companies like Google, Microsoft, Samsung and Volvo are beginning to use Rust (<a href="https://onevariable.com/blog/embedded-rust-production/">Source</a>). Getting rust experience early can potentially help you out in the long run.</p>
-</li>
-<li>
-<p><strong>Rust is fun</strong> - This is subjective but developing for rust is a ton of fun. You get to look at all sorts of datasheets and watch a library you wrote on your computer interact with the real world.</p>
-</li>
-</ul>
-<h2 id="other-useful-resources"><a class="header" href="#other-useful-resources">Other useful Resources</a></h2>
-<ul>
-<li><a href="https://docs.rust-embedded.org/discovery/microbit/">Discovery Rust book</a></li>
-</ul>
-<h2 id="reporting-problems"><a class="header" href="#reporting-problems">Reporting Problems</a></h2>
-<p>The source for this book is in the <a href="https://github.com/BIGGPIU/ten80av-rs">ten80av_rs github repository</a>. Please create a pull request if you notice a typo or something that is not gramatically correct.</p>
+                        <h1 id="overview"><a class="header" href="#overview">Overview</a></h1>
+<p>In this chapter you will learn how to write the library that will power your Autonomous Vehicle. This Chapter assumes that you already have a basic grasp on the syntax of rust. If that doesnt apply to you then go to the previous chapter or read the official rust book <a href="https://doc.rust-lang.org/book/title-page.html">here</a></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../2-rust-intro/3-cheatsheet/cheatsheet.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
 
-                            <a rel="next prefetch" href="../rust-intro/intro.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../3-making-your-library/1-setting-up-your-library/makelibrary.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -249,8 +195,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../2-rust-intro/3-cheatsheet/cheatsheet.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
 
-                    <a rel="next prefetch" href="../rust-intro/intro.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../3-making-your-library/1-setting-up-your-library/makelibrary.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

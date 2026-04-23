@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Setting up your first rust project - Ten80 Autonomous Vehicle Book</title>
+        <title>Making your first rust program - Ten80 Autonomous Vehicle Book</title>
 
 
         <!-- Custom HTML head -->
@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-d4f5601a.js";
+            window.path_to_searchindex_js = "../../searchindex-8b5412ce.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-b678102e.js"></script>
+        <script src="../../toc-cd16dc78.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -174,96 +174,338 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="installing-rust"><a class="header" href="#installing-rust">Installing Rust</a></h1>
-<p>The most common way to install rust is to use the Rustup command line tool. Rustup is a tool primarily used for managing rust versions and associated tools. Before continuing on, be sure that you’re connected to the internet.</p>
-<p>If any of this is unclear or you encounter any issues, refer to the installation section of the Rust Programming Language Book which you can read <a href="https://doc.rust-lang.org/book/ch01-01-installation.html">here</a></p>
-<h1 id="for-windows"><a class="header" href="#for-windows">For Windows</a></h1>
-<ol>
-<li>Go to the rust Installation page <a href="https://rust-lang.org/tools/install/">https://rust-lang.org/tools/install/</a></li>
-<li>Depending on the Architecture of your computer, click on one of the “Download Rustup-init.exe” Buttons</li>
-<li>Run the exe you downloaded.</li>
-<li>At some point in time you’ll be asked to install Visual Studio. You are required to do this for rust to work.</li>
-<li>to be sure that you have rust installed correctly, open your terminal and enter this command:
-<pre><code class="language-cmd">$ rustc --version
-</code></pre>
-</li>
-</ol>
-<h1 id="for-macos"><a class="header" href="#for-macos">For MacOS</a></h1>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>// refer to rust download page
-// https://rust-lang.org/tools/install/
-//
-// or the chapter in the book about installation 
-// https://doc.rust-lang.org/book/ch01-01-installation.html
-todo!(":3");
-<span class="boring">}</span></code></pre>
-<h1 id="for-linux"><a class="header" href="#for-linux">For Linux</a></h1>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>// refer to rust download page
-// https://rust-lang.org/tools/install/
-//
-// or the chapter in the book about installation 
-// https://doc.rust-lang.org/book/ch01-01-installation.html
-todo!(":3");
-<span class="boring">}</span></code></pre>
-<h1 id="setting-up-your-environment"><a class="header" href="#setting-up-your-environment">Setting Up Your Environment</a></h1>
+                        <h1 id="your-first-program"><a class="header" href="#your-first-program">Your first program</a></h1>
+<h2 id="hello-world"><a class="header" href="#hello-world">Hello, World</a></h2>
+<p>For our first program we’re going to create a program that gets two random numbers, adds them together and then prints out the result.</p>
+<p>Navigate to your projects <code>main.rs</code> and open it you’ll be greeted with something like this:</p>
+<pre class="playground"><code class="language-rust">fn main() {
+    println!("Hello, world!");
+}</code></pre>
+<h2 id="declaring-variables"><a class="header" href="#declaring-variables">Declaring Variables</a></h2>
+<p>this is your simple hello world program in rust. this is also where we’re going to be doing most of our programming for now.</p>
+<p>For now, lets scrap our boilerplate code and start writing our own. right now we dont have a way to get all our random numbers so lets just declare the variables we’re going to use to store our random numbers once we write the code to get the random numbers.</p>
+<p>The syntax for declaring variables in rust might remind you a bit of javascript. It looks like this:</p>
+<p><code>let variable_name;</code></p>
 <blockquote class="blockquote-tag blockquote-tag-important">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
-<p>This part of the guide assumes you already have VS Code installed. If you do not have VS Code installed you can follow step one of <a href="https://code.visualstudio.com/docs/setup/setup-overview">this guide</a></p>
+<p>always remember to add a “<code>;</code>” at the end of all your lines</p>
 </blockquote>
-<h2 id="installing-rust-analyzer"><a class="header" href="#installing-rust-analyzer">Installing Rust analyzer</a></h2>
-<p>Rust analyzer is a extremely useful tool for checking your rust code for bugs. In this step we’re going to install it</p>
-<ol>
-<li>Open VSCode and open the Extensions View (<code>Ctrl+Shift+X</code>)</li>
-<li>click on the search bar and type (or copy) this into the search bar</li>
-</ol>
-<pre><code>rust-lang.rust-analyzer
+<blockquote class="blockquote-tag blockquote-tag-important">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
+<p>Variables in rust are <strong>Immutable</strong> by default meaning that they cannot be changed after they are initialized. If you wish to have a variable that can change after it is initialized you can do so by adding <code>mut</code> to your variable declaration. It would look like this: <code>let mut variable_name;</code></p>
+</blockquote>
+<p>so once we declare our two variables your program should now look like this:</p>
+<p>we will also want to assign our variables a value so our program compiles. This can be any value you want.</p>
+<pre class="playground"><code class="language-rust no_run">fn main() {
+    let random_number_one = 0;
+    let random_number_two = 0;
+}</code></pre>
+<p>You may notice that right next to your variables theres some text that you didnt add that says <code>i32</code>. this is your variables <strong>Type</strong> rust is a strongly typed language which means that for your code to compile: The compiler needs to know exactly what type everything is before it compiles everything, and it also demands that once you say a variable is one type you cant reassign it to another type</p>
+<p>example:</p>
+<pre class="playground"><code class="language-rust compile_fail">fn main() {
+    let x:usize;
+    let y:i32 = 0;
+    x = y
+//  x has a type of usize and y has a type of i32 so we cant set x = y 
+}</code></pre>
+<pre class="playground"><code class="language-rust">fn main() {
+    let x;
+    let y:i32 = 0;
+    x = y;
+// works because x is automatically assigned a type based on how its used.
+}</code></pre>
+<p>you can run your program just to be sure it compiles but unfortunately right now it wont do anything. In the following step we will begin to add functionality to our program.</p>
+<h3 id="signed--unsigned-integers"><a class="header" href="#signed--unsigned-integers">Signed &amp; Unsigned integers</a></h3>
+<p>You may be wondering what an “<code>i32</code>” or a “<code>usize</code>” is. for now all you need to know about those types is that they are both numbers. number types that start with <strong>u</strong> (like <code>u8</code>, <code>u16</code>,<code>usize</code>) are <strong>unsigned integers</strong> meaning they’re integers that can only be positive. They’re formatted as <code>u(number of bits taken up by integer)</code>. So for example: if you wanted to use an 8 bit integer you would use the type <code>u8</code>. Number types that start with <strong>i</strong> (like <code>i8</code>, <code>i16</code>,<code>isize</code>) are <strong>signed integers</strong> meaning they’re integers that can be both positive and negative. Similarly to unsigned integers They’re formatted as <code>i(number of bits taken up by integer)</code>. So for example: if you wanted to use an 8 bit integer you would use the type <code>i8</code>. Both of them have their own cases where they’re useful so whenever you’re assigning a number think about which one fits your use case</p>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>There is also another number type that starts with <strong>f</strong>: they are <strong>floats</strong>. they will not be covered in this guide but you should be aware of their existence</p>
+</blockquote>
+<h2 id="adding-external-libraries"><a class="header" href="#adding-external-libraries">Adding External Libraries</a></h2>
+<p>Before continuing with the guide I want you to test something. Go into your program and type <code>random</code> and look at all the things vscode shows you. It may show you the variables you declared earlier as well as <code>hash::RandomState</code> (which is not relevant to what we are doing right now.) This might make you wonder “Where is the function for generating a random number?” there actually <em>isnt</em> a function for generating random numbers in rust’s standard library which means we have to source our random functions from somewhere else. In this cause we’re going to use the <a href="https://crates.io/crates/rand">rand library</a>. If we want to use the rand library though we must add it.</p>
+<p>Firstly, open your project folder inside of your terminal again</p>
+<pre><code>$ cd ./path/to/my-first-rust-project
 </code></pre>
-<ol start="3">
-<li>Install the First extension to show up</li>
-</ol>
-<h2 id="creating-your-first-project-folder-with-cargo"><a class="header" href="#creating-your-first-project-folder-with-cargo">Creating your first project folder with Cargo</a></h2>
-<p>before we start, you should create a folder for all of your rust projects then open that folder in your terminal.</p>
-<p>Once you have your project folder open run the following commands</p>
-<pre><code class="language-cmd">$ cargo new ./my-first-rust-project --name my-first-rust-project
-$ cd my-first-rust-project
-$ code .
+<p>now that we’re in our project folder in our terminal we’re going to use a useful tool that comes with our installation of rust: <strong>Cargo</strong>.</p>
+<p>Cargo is the main tool in a rust users toolkit. It handles everything from running your program to even adding external libraries like what we’re going to do now.</p>
+<p>To add libraries to your project you can run the following command in your terminal</p>
+<pre><code>$ cargo add &lt;library_name&gt;
 </code></pre>
-<h2 id="your-project-structure"><a class="header" href="#your-project-structure">Your project structure</a></h2>
-<p>When VScode opens you should see your project folder. The project folder will contain a couple files which will be explained in this section</p>
-<pre><code>my-first-rust-project
-├── src
-│   └── main.rs
-├── target
-│   ├── debug
-│   ├── flycheck0
-│   ├── .rustc_info_json
-│   └── CACHEDIR.TAG
-├── Cargo.lock
-└── Cargo.toml
+<p>so in this case we are going to run</p>
+<pre><code>$ cargo add rand
 </code></pre>
-<p>There are a couple files in your project but not a bunch of them are actually important. The following files are actually useful</p>
-<ul>
-<li><code>Cargo.toml</code> - This file has configuration information about your project</li>
-<li><code>src</code> - this is the folder where all your code goes
-<ul>
-<li><code>main.rs</code> - this is the main file that calls any code you write. This is the main file we’re going to be working on</li>
-</ul>
-</li>
-<li><code>target</code> - this folder has information that helps rust build your code and this folder also houses the distribution files that get built after you run <code>cargo build</code></li>
-</ul>
+<p>once you run that command cargo will install the rand library and add it to your project. Its such a convienient tool.</p>
+<h2 id="linking-external-rust-files"><a class="header" href="#linking-external-rust-files">Linking External Rust Files</a></h2>
+<p>now that we installed our library its time to use it. To make sure that our project is as clear as possible we’re going to make another module for all of our random generation.</p>
+<p>Make a file in the same folder as <code>main.rs</code> called <code>random_numbers.rs</code> then open <code>random_numbers.rs</code> in vscode</p>
+<p>You may notice that all of the code in vscode is grayed out. this is to show that the file is not linked to our main file. This begs the question: “How do you link the main file to random_numbers.rs?”</p>
+<p>There are two ways to do this: you can either use <code>CTRL + .</code> to open a suggestion menu and click <code>insert 'mod random_numbers;'</code> this suggestion adds <code>mod random_numbers</code> to <code>main.rs</code> which links the file to the project (<strong>MAKE SURE TO SAVE</strong>). The other way to do this is just by doing it manually. Navigate to your <code>main.rs</code> and simply insert the line <code>mod random_numbers;</code> manually.</p>
+<p>for future reference, mod stands for module and it links one rust file to another rust file. the syntax for linking files is like this:</p>
+<pre><code>&lt;visibility&gt; mod &lt;other_file_name&gt;
+</code></pre>
+<h2 id="using-external-libraries"><a class="header" href="#using-external-libraries">Using External Libraries</a></h2>
+<p>Now that we have our <code>random_numbers</code> file linked to our project lets start adding some code to our random_numbers file. first lets make an object called <code>RandomNumber</code> then give it a block that will soon hold all of our functions</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct RandomNumber {
+
+}
+
+
+impl RandomNumber {
+
+}
+<span class="boring">}</span></code></pre>
+<p><code>structs</code> in rust are roughly equivalent to objects or classes in other languages. they are formatted like so:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>&lt;visibility&gt; struct &lt;name&gt; {
+    &lt;object variable name&gt;:&lt;type&gt;,
+    &lt;object variable name&gt;:&lt;type&gt;
+}
+<span class="boring">}</span></code></pre>
+<p>structs in rust are also able to functions associated with them inside of <code>impl</code> blocks. <code>impl</code> blocks are formatted like this:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl &lt;struct_name&gt; {
+
+    &lt;visibility&gt; fn &lt;name&gt;(arg1:&lt;arg_type&gt;, arg2:&lt;arg_type&gt;) -&gt; &lt;return_type&gt; {
+
+    }
+
+    &lt;visibility&gt; fn &lt;name&gt;{
+        
+    }
+}
+<span class="boring">}</span></code></pre>
+<p>Before we start adding functionality to our object lets import the functions we’re going to need from the rand library. change your <code>random_numbers.rs</code> so it looks something like this:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use rand::{Rng, rng};
+use rand::prelude::ThreadRng;
+
+
+pub struct RandomNumber {
+
+}
+
+
+
+
+impl RandomNumber {
+
+}
+<span class="boring">}</span></code></pre>
+<p>the <code>use</code> keyword is used to use functions and objects from external libraries. “External libraries” doesnt always have to mean its a library you downloaded from the internet. An external library can be a file you created. to use our <code>random_numbers.rs</code> file as an example: if we wanted to use some of the code in this file inside of <code>main.rs</code> we could add the object to main.rs by adding <code>use crate::random_numbers::RandomNumber;</code> below the <code>mod random_numbers;</code></p>
+<p>now that we have our object and impl blocks and all the things from <code>rand</code> we’re going to use lets finally start writing our functions</p>
+<h2 id="your-first-function"><a class="header" href="#your-first-function">Your first function</a></h2>
+<p>We’re going to add three functions to our <code>RandomNumber</code> struct.</p>
+<pre><code class="language-no_copy rust">get_random_number()
+add_random_number()
+update_random_number()
+</code></pre>
+<p>first, lets make our get_random_number function. inside of our impl block we’re going to add the outline for our get_random_number function</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use rand::{Rng, rng};
+use rand::prelude::ThreadRng;
+
+
+pub struct RandomNumber {
+
+}
+
+
+
+
+impl RandomNumber {
+
+    pub fn get_random_number() -&gt; u32 {
+        // get our rng generator
+        let mut rng: ThreadRng = rng();
+        
+        // get a random 32 bit unsigned integer
+        rng.next_u32()
+    }
+
+}
+<span class="boring">}</span></code></pre>
+<p>next lets add our <code>add_random_number</code> function</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use rand::{Rng, rng};
+use rand::prelude::ThreadRng;
+
+
+pub struct RandomNumber {
+
+}
+
+
+
+
+impl RandomNumber {
+
+    pub fn get_random_number() -&gt; u32 {
+        let mut rng: ThreadRng = rng();
+        
+        rng.next_u32()
+    }
+
+
+    pub fn add_random_number(num_1:u32, num_2:u32) -&gt; u32 {
+        return num_1 + num_2;
+    }
+}
+<span class="boring">}</span></code></pre>
+<p>finally, we’re going to add our <code>update_random_number</code> function</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use rand::{Rng, rng};
+use rand::prelude::ThreadRng;
+
+
+pub struct RandomNumber {
+
+}
+
+
+
+
+impl RandomNumber {
+
+    pub fn get_random_number() -&gt; u32 {
+        let mut rng: ThreadRng = rng();
+        
+        rng.next_u32()
+    }
+
+
+    pub fn add_random_number(num_1:u32, num_2:u32) -&gt; u32 {
+        return num_1 + num_2;
+    }
+
+    pub fn update_random_number(mut num_1:u32) {
+        let mut rng:ThreadRng = rng();
+
+        num_1 = rng.next_u32();
+    }
+
+}
+
+<span class="boring">}</span></code></pre>
+<h3 id="returns-in-rust"><a class="header" href="#returns-in-rust">Returns In Rust</a></h3>
+<p>You may notice something when looking at the functions: <code>add_random_number</code> has <code>return num_1 + num_2;</code> while <code>get_random_number</code> doesnt have a semicolon at the end of the last line.</p>
+<blockquote class="blockquote-tag blockquote-tag-warning">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
+<p>This section will mention concepts that are not discussed in this guide</p>
+</blockquote>
+<p>rust gives developers two options for returning values which are useful in in different cases. Lets say for example we had a match statement (roughly equivalent to a switch statement in java) we could technically do it like this</p>
+<pre class="playground"><code class="language-rust">fn main() {
+    let x:Option&lt;u32&gt; = Some(0);
+
+    let y:u32;
+
+    match x {
+        Some(a) =&gt; {
+            y = a;
+        }
+        None =&gt; {
+            panic!("Couldnt find value");
+        }
+    }
+    println!("{y:?}");
+}</code></pre>
+<p>but this leads to more code being written for something that could do the same thing:</p>
+<pre class="playground"><code class="language-rust">fn main() {
+    let x:Option&lt;u32&gt; = Some(0);
+
+   
+
+    let y = match x {
+        Some(a) =&gt; {
+            a
+        }
+        None =&gt; {
+            panic!("Couldnt find value");
+        }
+    };
+   println!("{y:?}");
+}</code></pre>
+<p>this is one of the times where its useful to do a return without a return statement. If we were to use a return statement here, our program wouldnt compile.</p>
+<pre class="playground"><code class="language-rust no_compile">fn main() {
+    let x:Option&lt;u32&gt; = Some(0);
+
+   
+
+    let y = match x {
+        Some(a) =&gt; {
+            // returning a doesnt return it as the result 
+            // of the block which would cause y to equal 0
+            // it returns it as the result of the function
+            // which would assume that the function is "fn main() -&gt; u32" 
+            return a
+        }
+        None =&gt; {
+            panic!("Couldnt find value");
+        }
+    };
+   println!("{y:?}");
+}</code></pre>
+<p>returns can be useful though if you want to return out of a function in a <code>if</code> or <code>match</code> statement</p>
+<pre class="playground"><code class="language-rust editable"><span class="boring">fn main() {let x = anon_function(); println!("{x:?}")}
+</span>pub fn anon_function() -&gt; Result&lt;String,u32&gt; {
+    let mut x:Option&lt;u32&gt; = Some(0);
+    // x:Option&lt;u32&gt; = None;
+    // ^ uncomment me 
+
+    let y = match x {
+        Some(a) =&gt; {
+            a
+        }
+        None =&gt; {
+            // because we want to stop executing
+            // the function here, using a return 
+            // is useful
+            return Err(0)
+        }
+    };
+   let z = format!("{y:?}");
+
+    println!("{z:?}");
+
+    
+    Ok(String::from(z)) // interchangable with "return Ok(String::from(z));"
+}</code></pre>
+<p>deciding which to use is all up to context and your own coding style.</p>
+<h2 id="bringing-it-all-together"><a class="header" href="#bringing-it-all-together">Bringing it all together</a></h2>
+<p>Now, lets bring it all together. In your <code>main.rs</code> file lets add the functionality we created in <code>random_numbers.rs</code></p>
+<pre class="playground"><code class="language-rust"><span class="boring">pub struct RandomNumber { }
+</span><span class="boring">impl RandomNumber { pub fn get_random_number() -&gt; u32 { 123 }
+</span><span class="boring">pub fn add_random_number(num_1:u32, num_2:u32) -&gt; u32 { return num_1 + num_2; }
+</span><span class="boring">pub fn update_random_number(mut num_1:u32) { num_1 = 144 }
+</span><span class="boring">}
+</span>
+fn main() {
+    let random_number_one = RandomNumber::get_random_number();
+    let random_number_two = RandomNumber::get_random_number();
+
+    RandomNumber::update_random_number(random_number_one);
+    
+    let result = RandomNumber::add_random_number(random_number_one, random_number_two);
+    
+    println!("your result is: {result:?}");
+}</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../rust-intro/intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../2-rust-intro/1-setting-up-rust/setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../../rust-intro/2-your-first-program/first_program.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../2-rust-intro/3-cheatsheet/cheatsheet.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -273,11 +515,11 @@ $ code .
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../rust-intro/intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../2-rust-intro/1-setting-up-rust/setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../../rust-intro/2-your-first-program/first_program.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../2-rust-intro/3-cheatsheet/cheatsheet.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

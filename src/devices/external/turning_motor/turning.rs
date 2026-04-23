@@ -14,12 +14,6 @@ use crate::devices::external::{ServoErrors, ServoMotorController};
 
 #[derive(Debug)]
 /// Interface for External Turning Servos 
-/// 
-/// 0 deg at pwm_on 200
-/// 
-/// max at 600
-///  
-/// min at 150
 pub struct TurningMotor {
     // no generics since this is probably only ever gonna be used with the microbit
     // unless if some mad man wants to step up above this and use an esp32 or something

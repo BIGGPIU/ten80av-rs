@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-d4f5601a.js";
+            window.path_to_searchindex_js = "searchindex-8b5412ce.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-b678102e.js"></script>
+        <script src="toc-cd16dc78.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -359,13 +359,13 @@ $ code .
     x = y;
 // works because x is automatically assigned a type based on how its used.
 }</code></pre>
+<p>you can run your program just to be sure it compiles but unfortunately right now it wont do anything. In the following step we will begin to add functionality to our program.</p>
 <h3 id="signed--unsigned-integers"><a class="header" href="#signed--unsigned-integers">Signed &amp; Unsigned integers</a></h3>
 <p>You may be wondering what an “<code>i32</code>” or a “<code>usize</code>” is. for now all you need to know about those types is that they are both numbers. number types that start with <strong>u</strong> (like <code>u8</code>, <code>u16</code>,<code>usize</code>) are <strong>unsigned integers</strong> meaning they’re integers that can only be positive. They’re formatted as <code>u(number of bits taken up by integer)</code>. So for example: if you wanted to use an 8 bit integer you would use the type <code>u8</code>. Number types that start with <strong>i</strong> (like <code>i8</code>, <code>i16</code>,<code>isize</code>) are <strong>signed integers</strong> meaning they’re integers that can be both positive and negative. Similarly to unsigned integers They’re formatted as <code>i(number of bits taken up by integer)</code>. So for example: if you wanted to use an 8 bit integer you would use the type <code>i8</code>. Both of them have their own cases where they’re useful so whenever you’re assigning a number think about which one fits your use case</p>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
 <p>There is also another number type that starts with <strong>f</strong>: they are <strong>floats</strong>. they will not be covered in this guide but you should be aware of their existence</p>
 </blockquote>
-<p>you can run your program just to be sure it compiles but unfortunately right now it wont do anything. In the following step we will begin to add functionality to our program.</p>
 <h2 id="adding-external-libraries"><a class="header" href="#adding-external-libraries">Adding External Libraries</a></h2>
 <p>Before continuing with the guide I want you to test something. Go into your program and type <code>random</code> and look at all the things vscode shows you. It may show you the variables you declared earlier as well as <code>hash::RandomState</code> (which is not relevant to what we are doing right now.) This might make you wonder “Where is the function for generating a random number?” there actually <em>isnt</em> a function for generating random numbers in rust’s standard library which means we have to source our random functions from somewhere else. In this cause we’re going to use the <a href="https://crates.io/crates/rand">rand library</a>. If we want to use the rand library though we must add it.</p>
 <p>Firstly, open your project folder inside of your terminal again</p>
@@ -732,7 +732,7 @@ fn main() {
 <span class="boring">}</span></code></pre>
 <h3 id="create-a-function-that-cannot-be-called-from-extenral-files"><a class="header" href="#create-a-function-that-cannot-be-called-from-extenral-files">Create a function that cannot be called from extenral files</a></h3>
 <pre><code>impl &lt;struct name&gt; {
-    fn &lt;function_name&gt;(arg_1:&lt;type&gt;,arg_2:&lt;type&gt;) -&gt; &lt;return _type&gt; {
+    fn &lt;function_name&gt;(arg_1:&lt;type&gt;,arg_2:&lt;type&gt;) -&gt; &lt;return_type&gt; {
 
         return &lt;return_type&gt; 
         OR
@@ -845,6 +845,416 @@ fn main() {
 
     }
 } </code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="overview-1"><a class="header" href="#overview-1">Overview</a></h1>
+<p>In this chapter you will learn how to write the library that will power your Autonomous Vehicle. This Chapter assumes that you already have a basic grasp on the syntax of rust. If that doesnt apply to you then go to the previous chapter or read the official rust book <a href="https://doc.rust-lang.org/book/title-page.html">here</a></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="creating-your-library-folder"><a class="header" href="#creating-your-library-folder">Creating your library folder</a></h1>
+<h2 id="creating-your-library-folder-with-cargo"><a class="header" href="#creating-your-library-folder-with-cargo">Creating your Library folder with Cargo</a></h2>
+<p>Before we start, you should have a folder for all of your rust projects then open that folder in your terminal.</p>
+<p>Once you have your project folder open run the following commands</p>
+<pre><code class="language-cmd">$ cargo new --lib ten80-av-library
+$ cd ten80-av-library
+$ code . 
+</code></pre>
+<h2 id="your-project-structure-1"><a class="header" href="#your-project-structure-1">Your project structure</a></h2>
+<p>When VSCode opens you should be able to see your library folder. this folder looks relatively similar to what you would get if you ran cargo new without the <code>--lib</code> argument. there are a few key differences though</p>
+<pre><code>ten80-av-library
+├── src
+│   └── lib.rs
+├── target
+│   ├── debug
+│   ├── flycheck0
+│   ├── .rustc_info_json
+│   └── CACHEDIR.TAG
+├── Cargo.lock
+└── Cargo.toml
+</code></pre>
+<p>The main difference is <strong>lib.rs</strong> this file is kind of like <code>main.rs</code> but instead of it holding all of your code it instead holds the modules for your library as well as some introductory documentation for your library.</p>
+<p><strong>Before moving on to the next part of this chapter: please go into lib.rs and delete all of the placeholder code that is in the file.</strong></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="what-is-a-no_std"><a class="header" href="#what-is-a-no_std">What is a no_std</a></h1>
+<h2 id="why-do-we-need-no_std"><a class="header" href="#why-do-we-need-no_std">Why do we need no_std</a></h2>
+<p>When you compile a program with rust it makes a couple assumptions. It assumes that whatever you’re compiling for will have an operating system and it will be able to benefit from all of the benefits of having an operating system.</p>
+<p>The Micro:bit v2 doesnt have the liberty of having an operating system though. This is one of the cases where we’re going to want to use no_std</p>
+<p>no_std throws all of that out the window. Like the name implies it prevents you from using functions from the standard library (libstd) but rather it only lets you use functions from the core library (libcore)</p>
+<p>There are not a whole lot of places in this guide where you would be tempted to reach for a function in the standard library but its important to go over the traits of programming in a no_std environment to make it easier to implement any new features you may desire to the library.</p>
+<h2 id="making-your-library-a-no_std-environment"><a class="header" href="#making-your-library-a-no_std-environment">Making Your Library a no_std environment</a></h2>
+<p>Inside of your <code>lib.rs</code> add this line to the top of your file</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![no_std]
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="installing-the-required-libraries"><a class="header" href="#installing-the-required-libraries">Installing the Required Libraries</a></h1>
+<h2 id="installing-the-libraries-from-the-command-line"><a class="header" href="#installing-the-libraries-from-the-command-line">Installing the libraries from the command line</a></h2>
+<p>There are a couple libraries that are integral to making your library work and they will be used in the other parts of the chapter. To make everything flow better we’re just going to install all of the libraries we’re going to need right now. Open your library folder in your terminal and run the following commands:</p>
+<pre><code class="language-no_copy">$ cargo add embedded-hal
+$ cargo add embedded-io
+$ cargo add lsm303agr
+$ cargo add microbit-v2
+$ cargo add pwm-pca9685
+</code></pre>
+<h2 id="installing-the-libraries-by-editing-your-cargotoml"><a class="header" href="#installing-the-libraries-by-editing-your-cargotoml">Installing the libraries by editing your <code>Cargo.toml</code></a></h2>
+<p>Open your <code>Cargo.toml</code> file in your code editor and copy the following lines under “[dependencies]”</p>
+<pre><code class="language-toml">embedded-hal = "1.0.0"
+embedded-io = "0.7.1"
+lsm303agr = "1.1.0"
+microbit-v2 = "0.16.0"
+pwm-pca9685 = "1.0.0"
+</code></pre>
+<p>when you’re done your <code>Cargo.toml</code> should look like this:</p>
+<pre><code class="language-toml">[package]
+name = "ten80-av-library"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+embedded-hal = "1.0.0"
+embedded-io = "0.7.1"
+lsm303agr = "1.1.0"
+microbit-v2 = "0.16.0"
+pwm-pca9685 = "1.0.0"
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="creating-your-library-strucutre"><a class="header" href="#creating-your-library-strucutre">Creating Your Library Strucutre</a></h1>
+<h2 id="moving-your-devices-from-the-root-of-the-folder"><a class="header" href="#moving-your-devices-from-the-root-of-the-folder">Moving your devices from the root of the folder</a></h2>
+<p>To make your Library easier to navigate for other users or future you we’re going to split the library into multiple different parts. inside of your <code>src</code> file create a folder called <code>devices</code> then add a file called <code>mod.rs</code> to that folder.</p>
+<p>This is the folder where we’re going to use to interact with the external and internal devices on the micro:bit. To make use of this folder though, we have to link it to <code>lib.rs</code> open <code>lib.rs</code> and insert the following line:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub mod devices;
+<span class="boring">}</span></code></pre>
+<p>When you’re done with this step your folder should look something like this</p>
+<pre><code>ten80-av-library
+├── src
+│   ├── lib.rs
+│   └── devices
+│       └── mod.rs
+├── target
+│   ├── debug
+│   ├── flycheck0
+│   ├── .rustc_info_json
+│   └── CACHEDIR.TAG
+├── Cargo.lock
+└── Cargo.toml
+
+</code></pre>
+<h2 id="optional-separating-your-internal-and-external-devices"><a class="header" href="#optional-separating-your-internal-and-external-devices">Optional: Separating your internal and external devices</a></h2>
+<p>This is marked as optional because technically you dont <em>need</em> to separate your external and internal sensors but it does make your library slightly more clear.</p>
+<p>Inside of your <code>devices</code> folder create two folders. <code>external</code> and <code>internal</code>. Create a <code>mod.rs</code> file in both of these folders. Once you are done with that open the <code>mod.rs</code> file inside of <code>devices</code> and add the following lines:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub mod external;
+pub mod internal;
+<span class="boring">}</span></code></pre>
+<p>If you decide to do this then your folder should look something like this</p>
+<pre><code>ten80-av-library
+├── src
+│   ├── lib.rs
+│   └── devices
+│       ├── mod.rs
+│       ├── external
+│       │   └── mod.rs
+│       └── internal
+│           └── mod.rs
+├── target
+│   ├── debug
+│   ├── flycheck0
+│   ├── .rustc_info_json
+│   └── CACHEDIR.TAG
+├── Cargo.lock
+└── Cargo.toml
+</code></pre>
+<blockquote class="blockquote-tag blockquote-tag-warning">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
+<p>This guide will not explicitly tell you if each file should be placed in <code>external</code> or <code>internal</code> I advise you use common sense to tell where each component should be placed</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="overview-2"><a class="header" href="#overview-2">Overview</a></h1>
+<p>In this part of the guide you will learn how to program the Turning Servo/Motor as well as the Acceleration Motor.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="how-do-the-motors-work"><a class="header" href="#how-do-the-motors-work">How Do The Motors Work?</a></h1>
+<p>Before we start programming the motors its worth explaining how the micro:bit is able to communicate with the motors</p>
+<h2 id="acceleration-motors"><a class="header" href="#acceleration-motors">Acceleration Motors</a></h2>
+<p>An acceleration motor is a motor whos only job is to turn 360 degrees forwards or backwards and do nothing else. You cannot explicitly tell this motor “hey, I want to go to 180 degrees” (Its not impossible to make it stop at 180 degrees exactly though. you just have to code that yourself)</p>
+<p>Typically when you are interacting with this kind of motor in the real world its logic is simple. The more voltage you pour into it, the faster it goes.</p>
+<p>Theres a problem with this when we’re programming with the micro:bit though. The microbit has no way to change the amount voltage it puts out. this must mean its impossible to change how fast a motor goes then. Right?</p>
+<h2 id="pwm-pulse-width-modulation"><a class="header" href="#pwm-pulse-width-modulation">PWM (Pulse Width Modulation)</a></h2>
+<p>To communicate with components that require a variable amount of voltage we can use Pulse Width Modulation or PWM. PWM switches our power source between on and off at a certain interval to simulate a steady lower voltage. This can let us supply 2.5v of power with a 5v power source.</p>
+<p><img src="https://cdn.sparkfun.com/assets/f/9/c/8/a/512e869bce395fbc64000002.JPG" alt="Visual Representation of PWM"></p>
+<p>(Credit: <a href="https://learn.sparkfun.com/tutorials/pulse-width-modulation/all">SparkFun Electronics</a>)</p>
+<h2 id="turning-motors"><a class="header" href="#turning-motors">Turning Motors</a></h2>
+<p>A turning motor (Or a Servo Motor) is a motor where instead of speeding up when you give it more voltage. It moves from one angle to another. Basically unlike Acceleration motors you can tell it “Hey I want to go 180 degrees” and it will actually do that.</p>
+<h2 id="the-chip-in-charge-of-the-motors"><a class="header" href="#the-chip-in-charge-of-the-motors">The Chip in charge of the motors</a></h2>
+<p>Technically the Micro:bit could control the motors by itself (with the help of some external power source) but that would take up processing power on the microcontroller so the duty of managing all of our PWM outputs is shoved onto an external chip: The PCA9685. All this chip does is control our PWM outputs without the micro:bit having to manage them all.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="programming-the-acceleration-motor"><a class="header" href="#programming-the-acceleration-motor">Programming the acceleration motor</a></h1>
+<h2 id="creating-your-motor-controller"><a class="header" href="#creating-your-motor-controller">Creating your motor controller</a></h2>
+<p>We have one last intermediate step before we can actually program our acceleration motor we have to program a controller for it. We do this because we have to configure the chip that controls the motors. Create a file called <code>servo_motor_controller.rs</code> in your <code>devices</code> folder and paste this code:</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use microbit::hal::Twim;
+use microbit::hal::twim::Frequency;
+use pwm_pca9685::{Address, Pca9685};
+
+pub struct ServoMotorController {
+    pub(crate) controller: Pca9685&lt;Twim&lt;microbit::pac::TWIM0&gt;&gt;
+}
+
+impl ServoMotorController {
+
+}
+<span class="boring">}</span></code></pre>
+<p>the code should appear gray at this point. hit <code>CTRL + .</code> then <code>Enter</code> this will add the file to your <code>mod.rs</code></p>
+<p>What this does is create a structure that contains the Object that lets us communicate with the PCA9685 chip. <code>Twim&lt;microbit::pac::TWIM0&gt;</code> is the I2C interface on the micro:bit. This guide will not explain how I2C works but you can read more about it <a href="https://learn.sparkfun.com/tutorials/i2c/all">here</a>.</p>
+<p>Now that we have the structure created we have to create a way to use it.
+add this function inside of <code>impl ServoMotorController {}</code></p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn new(
+    // this allows us to interact with our I2C interface
+    board_twim0:microbit::pac::TWIM0,
+    // our actual i2c pins. 
+    board_external_i2c_pins:microbit::hal::twim::Pins
+) -&gt; ServoMotorController 
+{
+    
+    let address = Address::default();
+
+    // set up our I2C interface so it can be used
+    let i2c_twim = microbit::hal::Twim::new(
+        board_twim0,
+        board_external_i2c_pins.into(),
+        Frequency::K250
+    );     
+
+    // try to create our controller
+    let mut pwm: Pca9685&lt;Twim&lt;microbit::pac::TWIM0&gt;&gt; = match pwm_pca9685::Pca9685::new(i2c_twim, address) {
+        // if it works then use it 
+        Ok(x) =&gt; x,
+        // otherwise, quit the program
+        Err(_) =&gt; {
+                panic!();
+            },
+    };
+
+    // set the prescale to a value the motors like
+    pwm.set_prescale(100).unwrap();
+
+    // enable the chip
+    pwm.enable().unwrap();
+
+    return ServoMotorController {
+        controller: pwm
+    }
+}
+<span class="boring">}</span></code></pre>
+<p>with this function created we now have a way to interact with our controller inside of other functions.</p>
+<h2 id="why-are-we-making-our-own-interface-the-object-is-right-there"><a class="header" href="#why-are-we-making-our-own-interface-the-object-is-right-there">Why are we making our own interface? The object is right there</a></h2>
+<p>You may be wondering why did we go out of way to create our own struct just to hold this one object. Its apart of a process I like to describe as <strong>Stupid Proofing</strong>. Your first instinct may be to give the person using your library as much power as possible. It can meet more peoples needs that way right? Thats where you’re wrong, not fundamentally wrong but wrong in this case. You are creating a library for one chip, one motor interface and likely one kind of motor. If you give people the power to configure the chip themselves they might do it wrong. When you’re writing a library like this one <strong>you dont want to give people the liberty to be wrong</strong>. For example: Later on in this guide you will end up setting up a serial interface for your micro:bit. To set this up you create a <code>UartePort</code> struct that looks like this</p>
+<pre class="playground"><code class="language-rust no_copy no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>UartePort::new(Uarte::new(
+<span class="boring">    board_uarte,
+</span><span class="boring">    uart_pin.into(),
+</span><span class="boring">    uarte::Parity::EXCLUDED,
+</span>    --snip--
+    uarte::Baudrate::BAUD115200
+))
+<span class="boring">}</span></code></pre>
+<p>If the developers of the Uarte library were to not engage in the practice of stupid proofing they would just let you set the bauderate using a <code>u32</code> like this:</p>
+<pre class="playground"><code class="language-rust no_copy no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>UartePort::new(Uarte::new(
+<span class="boring">    board_uarte,
+</span><span class="boring">    uart_pin.into(),
+</span><span class="boring">    uarte::Parity::EXCLUDED,
+</span>    --snip--
+<span class="boring">    // the typo is there to prove my point
+</span>    baudrate: 115300
+))
+<span class="boring">}</span></code></pre>
+<p>It should be obvious how this can go wrong. One typo can cause someone to be stuck in hours of bug fixing and stack overflow questions just because the developers behind Uarte gave you the liberty to be wrong. When you’re developing libraries always give yourself time to ask yourself the question “how much nuance is there in the problem im solving?” If there is no nuance then dont even ask the user how they want to configure the object. If there is some nuance then consider using an <code>enum</code>. If the problem is really nuanced and each person has different needs then this is the time to allow the user to fully customize how they want to configure the object.</p>
+<h2 id="creating-your-acceleration-motor-interface"><a class="header" href="#creating-your-acceleration-motor-interface">Creating your Acceleration Motor Interface</a></h2>
+<p>Create a file named <code>acceleration_motor_controller.rs</code>. just like before press <code>CTRL + .</code> then <code>Enter</code> to add this file to your mod.rs. Then add this code to your <code>acceleration_motor_controller.rs</code> file</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use pwm_pca9685::Channel;
+
+// an enum to say what we're doing with the motor right now
+pub enum MotorState {
+    Coast,
+    Reverse,
+    Forward,
+    Brake
+}
+
+// function to make your life easier
+pub enum MicrobitDriverMotorPorts {
+    M1,
+    M2,
+    M3,
+    M4,
+}
+
+impl MicrobitDriverMotorPorts {
+    // function to make using this library easier
+    pub fn motor_get(self) -&gt; (Channel,Channel) {
+        match self {
+                        // the channels associated with port MX
+            Self::M1 =&gt;   (Channel::C7,Channel::C6),
+            Self::M2 =&gt;   (Channel::C5,Channel::C4),
+            Self::M3 =&gt;   (Channel::C3,Channel::C2),
+            Self::M4 =&gt;   (Channel::C1,Channel::C0)
+        }
+    }
+}
+
+pub struct AccelerationMotor {
+    forward_port:Channel,
+    reverse_port:Channel,
+    speed:u16,
+    state:MotorState
+}
+
+
+impl AccelerationMotor {
+    pub fn new(forward_channel:Channel, reverse_channel:Channel) -&gt; Self{
+        return Self {
+            forward_port:forward_channel,
+            reverse_port:reverse_channel,
+            speed:0_u16,
+            state:MotorState::Brake
+        }
+    }
+}
+<span class="boring">}</span></code></pre>
+<p>now that we have a way to initialize our acceleration controller, now we have to give it the ability to actually control the motors on the Autonomous Vehicle.</p>
+<p>Before we write the functions though we should learn about how the state of the two ports affects how the motor moves. The behavior can be described with this table:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th></th><th>Forward Port ON</th><th>Forward Port OFF</th></tr>
+</thead>
+<tbody>
+<tr><td>Reverse Port ON</td><td>Brake</td><td>Reverse</td></tr>
+<tr><td>Reverse Port OFF</td><td>Forward</td><td>Coast</td></tr>
+</tbody>
+</table>
+</div>
+<p>now that we know this information we can start writing functions that let us interact with the motor</p>
+<pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl AccelerationMotor {
+// we are separating the change_state and change speed
+// functions to make this library easier to use.
+// it would get annoying if we had to put in the same speed/state 
+// we had before if we only wanted to change our state or speed
+pub fn change_state(&amp;mut self, servo_motor_controller: &amp;mut crate::devices::servo_motor_controller::ServoMotorController,new_state:MotorState) {
+    self.state = new_state;
+    self.write_to_motor_chip(servo_motor_controller);
+}
+
+pub fn change_speed(&amp;mut self, servo_motor_controller: &amp;mut crate::devices::servo_motor_controller::ServoMotorController,new_speed:u16) {
+        self.speed = new_speed;
+        self.write_to_motor_chip(servo_motor_controller);
+    }
+
+// convienience function
+pub fn brake(&amp;mut self, servo_motor_controller: &amp;mut crate::devices::servo_motor_controller::ServoMotorController) {
+    self.state = MotorState::Brake;
+    self.write_to_motor_chip(servo_motor_controller);
+}
+
+// convienience function
+pub fn forward(&amp;mut self, servo_motor_controller: &amp;mut crate::devices::servo_motor_controller::ServoMotorController) {
+    self.state = MotorState::Forward;
+    self.write_to_motor_chip(servo_motor_controller);
+}
+
+fn write_to_motor_chip(&amp;self, servo_motor_controller: &amp;mut crate::devices::servo_motor_controller::ServoMotorController) {
+        
+
+    match self.state {
+        MotorState::Coast =&gt; {
+            servo_motor_controller.controller.set_channel_full_off(self.forward_port).unwrap();
+            servo_motor_controller.controller.set_channel_full_off(self.reverse_port).unwrap();
+            
+        },
+        MotorState::Reverse =&gt; {
+            servo_motor_controller.controller.set_channel_full_off(self.forward_port).unwrap();
+            // set the reverse port on for self.speed / 4095 cycles
+            servo_motor_controller.controller.set_channel_on_off(self.reverse_port, 0, self.speed).unwrap();
+        },
+        MotorState::Forward =&gt; {
+            // set the reverse port on for self.speed / 4095 cycles
+            servo_motor_controller.controller.set_channel_on_off(self.forward_port, 0,self.speed).unwrap();
+            servo_motor_controller.controller.set_channel_full_off(self.reverse_port).unwrap();
+        },
+        MotorState::Brake =&gt; {
+            servo_motor_controller.controller.set_channel_on_off(self.forward_port, 0,self.speed).unwrap();
+            servo_motor_controller.controller.set_channel_on_off(self.reverse_port, 0,self.speed).unwrap();
+            
+        },
+    }
+}
+}
+<span class="boring">}</span></code></pre>
+<p>The final thing we have to do before we’re done is update our <code>mod.rs</code> file. Add the following lines to your <code>devices/mod.rs</code> file</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub use servo_motor_controller::ServoMotorController;
+pub use acceleration_motor_controller::*;
+<span class="boring">}</span></code></pre>
+<p>Your <code>devices/mod.rs</code> file should look like this:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>mod servo_motor_controller;
+mod acceleration_motor_controller;
+
+
+pub use servo_motor_controller::ServoMotorController;
+pub use acceleration_motor_controller::*;
+<span class="boring">}</span></code></pre>
+<p>once you have that done then you have completely finished writing an interface to your Acceleration Motor. A user of your library would use it like this</p>
+<pre class="playground"><code class="language-rust">#![no_std]
+#![no_main]
+
+use ten80_av_library;
+use microbit::{self as _};
+use microbit::board::Board;
+use ten80_av_library::devices::MicrobitDriverMotorPorts;
+
+#[cortex_m_rt::entry]
+fn main_fn() -&gt; ! {
+    let mut board = Board::take().unwrap();
+
+    let i2c_external:microbit::hal::twim::Pins = board.i2c_external.into();
+
+    let mut servo_controller = ten80_av_library::devices::ServoMotorController::new(
+        board.TWIM0,
+        i2c_external,
+    );
+
+    let (forward_port,reverse_port) = MicrobitDriverMotorPorts::M1.motor_get();
+
+    let mut acceleration_motor = ten80_av_library::devices::AccelerationMotor::new(
+        forward_port,
+        reverse_port
+    );
+
+    acceleration_motor.change_speed(&amp;mut servo_controller, 4095);
+    acceleration_motor.change_state(&amp;mut servo_controller, ten80_av_library::devices::MotorState::Brake);
+
+    loop {
+
+    }
+}</code></pre>
+<p><strong>Remember to save all of your <code>mod.rs</code> files.</strong></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="programming-the-acceleration-motor-1"><a class="header" href="#programming-the-acceleration-motor-1">Programming the acceleration motor</a></h1>
+<h2 id="creating-the-turning-motor-interface"><a class="header" href="#creating-the-turning-motor-interface">Creating the turning motor interface</a></h2>
 
                     </main>
 

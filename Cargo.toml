@@ -7,7 +7,7 @@ license = "GPL-3.0"
 keywords = ["robitics", "ten80"]
 homepage = "https://github.com/BIGGPIU/ten80av-rs"
 readme = "README.md"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2024"
 
 [dependencies]

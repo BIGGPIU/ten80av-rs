@@ -62,6 +62,8 @@ fn main() {
 }
 ```
 
+you can run your program just to be sure it compiles but unfortunately right now it wont do anything. In the following step we will begin to add functionality to our program.
+
 ### Signed & Unsigned integers
 
 You may be wondering what an "`i32`" or a "`usize`" is. for now all you need to know about those types is that they are both numbers. number types that start with **u** (like `u8`, `u16`,`usize`) are **unsigned integers** meaning they're integers that can only be positive. They're formatted as `u(number of bits taken up by integer)`. So for example: if you wanted to use an 8 bit integer you would use the type `u8`. Number types that start with **i** (like `i8`, `i16`,`isize`) are **signed integers** meaning they're integers that can be both positive and negative. Similarly to unsigned integers They're formatted as `i(number of bits taken up by integer)`. So for example: if you wanted to use an 8 bit integer you would use the type `i8`. Both of them have their own cases where they're useful so whenever you're assigning a number think about which one fits your use case
@@ -70,7 +72,6 @@ You may be wondering what an "`i32`" or a "`usize`" is. for now all you need to 
 > There is also another number type that starts with **f**: they are **floats**. they will not be covered in this guide but you should be aware of their existence 
 
 
-you can run your program just to be sure it compiles but unfortunately right now it wont do anything. In the following step we will begin to add functionality to our program.
 
 
 ## Adding External Libraries
