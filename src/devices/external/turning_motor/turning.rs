@@ -23,7 +23,8 @@ use crate::devices::external::{ServoErrors, ServoMotorController};
 pub struct TurningMotor {
     // no generics since this is probably only ever gonna be used with the microbit
     // unless if some mad man wants to step up above this and use an esp32 or something
-    channel:Channel
+    channel:Channel,
+    neutral_direction:u16
 }
 
 
@@ -32,7 +33,7 @@ impl TurningMotor {
     /// Only accepts ports labeled SX
     /// 
     /// Trying to pass a MX port will cause this function to return an Error
-    pub fn new(channel:MicrotbitDriverPorts) -> Result<TurningMotor,ServoErrors>{
+    pub fn new(channel:MicrotbitDriverPorts,neutral_direction:u16) -> Result<TurningMotor,ServoErrors>{
 
         match channel {
             MicrotbitDriverPorts::M1 => {
@@ -53,13 +54,12 @@ impl TurningMotor {
         }
 
         return Ok(TurningMotor {
-            channel: channel.servo_get()
+            channel: channel.servo_get(),
+            neutral_direction
         })
     }
 
     /// change a servo angle when you have a specific PWM value you want to set it to
-    /// 
-    /// Neutral value: 200
     /// 
     /// Read the documentation about the motor here: <https://d3if9wubzr0anm.cloudfront.net/pds/2213210-1.pdf>
     pub fn raw_change_servo_angle(&mut self, servo_motor_controller: &mut ServoMotorController,value:u16) {
@@ -68,6 +68,6 @@ impl TurningMotor {
 
     /// resets the servo to a neutral direction
     pub fn reset_direction(&mut self, servo_motor_controller: &mut ServoMotorController) {
-        servo_motor_controller.controller.set_channel_on_off(self.channel, 0, 200).unwrap();
+        servo_motor_controller.controller.set_channel_on_off(self.channel, 0, self.neutral_direction).unwrap();
     }   
 }
