@@ -18,6 +18,12 @@ impl<T:Channel> IRSensor<T> {
 
 
     /// Make a new IR Sensor 
+    /// 
+    /// # Example:
+    /// ```rust
+    /// let mut right_ir_sensor = IRSensor::new(board.edge.e01.into_floating_input(), 17500, &mut serial);
+    /// let mut left_ir_sensor = IRSensor::new(board.edge.e00.into_floating_input(), 17500, &mut serial);
+    /// ```
     pub fn new(
         output_port:T,
         offset:i16,
