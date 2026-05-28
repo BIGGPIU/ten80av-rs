@@ -1,7 +1,7 @@
-const IR_SENSOR_IDENTIFIER:u8 = 0;
-const ULTRASONIC_DISTANCE_SENSOR_IDENTIFIER:u8 = 1;
-const RADIO_MESSAGE_IDENTIFIER:u8 = 2;
-const MAGNOMETER_MESSAGE_IDENTIFIER:u8 = 3;
+pub(crate) const IR_SENSOR_IDENTIFIER:u8 = 0;
+pub(crate) const ULTRASONIC_DISTANCE_SENSOR_IDENTIFIER:u8 = 1;
+pub(crate) const RADIO_MESSAGE_IDENTIFIER:u8 = 2;
+pub(crate) const MAGNOMETER_MESSAGE_IDENTIFIER:u8 = 3;
 
 /// trait for creating your own microbit messages
 pub trait MicrobitMessageFormat {

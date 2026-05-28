@@ -5,6 +5,7 @@ use microbit::hal::ieee802154::{self, Packet};
 use microbit::pac::TIMER0;
 use core::fmt::Write;
 
+use crate::utils::MicrobitMessageFormat;
 use crate::utils::serial::Serial;
 
 
@@ -16,16 +17,24 @@ pub enum RadioError {
 }
 
 /// Sender Radio For the Micro:bit V2
-pub struct Radio<'a> {
+/// 
+/// This one sends information over the radio using the protocol developed by the Calvert Cruisers. This is only one standard for 
+/// sending and recieving data over radio. If you do not wish to use it and would like to make your own then please refer to [INSERT RADIO.RS LINK]
+/// 
+/// 
+/// 
+/// # Key Differences between Radio and CalvertCruisersStandardRadio (CCSR)
+/// * CCSR Requires a password.
+/// * CCSR Passwords are 4 bytes rather than 3 bytes 
+/// * CCSR can only send messages if they come from a source that implements [INSERT MESSAGEFORMAT TRAIT]
+/// * CCSR sends messages in 20 byte messages rather versus the 16 byte long messages sent with Radio
+pub struct CalverCruisersStandardRadio<'a> {
     controller:microbit::hal::ieee802154::Radio<'a>,
-    password:Option<[u8;3]>,
+    password:[u8;4],
     timeout:u32,
-
 }
 
-
-
-impl Radio<'_> {
+impl CalverCruisersStandardRadio<'_> {
 
 
     /// Initialize the radio.
@@ -45,9 +54,10 @@ impl Radio<'_> {
         board_radio:microbit::pac::RADIO,
         clocks:&'a Clocks<ExternalOscillator, microbit::hal::clocks::Internal, microbit::hal::clocks::LfOscStopped>,
         channel:ieee802154::Channel,
+        password:[u8;4],
         timeout:u32,
         serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>
-    ) -> crate::devices::internal::radio::sender::radio::Radio<'a> {
+    ) -> CalverCruisersStandardRadio<'a> {
 
         Serial::write(serial, "Starting Radio Configured As A Sender", crate::utils::serial::MessageSeverity::INFORMATIVE);
         
@@ -58,7 +68,7 @@ impl Radio<'_> {
 
         
         
-        return Radio { controller:  radio, timeout,password: None};
+        return CalverCruisersStandardRadio { controller:  radio, timeout,password};
     }
 
     /// Initialize the radio.
@@ -78,8 +88,9 @@ impl Radio<'_> {
         board_radio:microbit::pac::RADIO,
         clocks:&'a Clocks<ExternalOscillator, microbit::hal::clocks::Internal, microbit::hal::clocks::LfOscStopped>,
         channel:ieee802154::Channel,
+        password:[u8;4],
         timeout:u32
-    ) -> crate::devices::internal::radio::sender::radio::Radio<'a> {
+    ) -> CalverCruisersStandardRadio<'a> {
 
         let mut radio: microbit::hal::ieee802154::Radio<'a> = microbit::hal::ieee802154::Radio::init(board_radio, &clocks);
         
@@ -87,7 +98,7 @@ impl Radio<'_> {
 
 
         
-        return Radio { controller:  radio, timeout,password: None};
+        return CalverCruisersStandardRadio { controller:  radio, timeout,password};
     }
 
     /// tries to write bytes to the Radio
@@ -97,23 +108,40 @@ impl Radio<'_> {
     /// ```rust
     /// todo!(":3")
     /// ```
-    pub fn write(&mut self, message:&[u8;16], timer: &mut Timer<TIMER0>,serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) -> Result<(),RadioError> {
+    pub fn write(&mut self, message:&impl MicrobitMessageFormat, timer: &mut Timer<TIMER0>,serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) -> Result<(),RadioError> {
         
         Serial::write(serial, "Attempting to broadcast a message...",crate::utils::serial::MessageSeverity::INFORMATIVE);
 
         let mut packet = Packet::new();
 
-        // add the password to the packet if it exists
-        match self.password {
-            Some(password) => {
-                packet.copy_from_slice(&password);
-            },
-            None => {
+        let message_buf = message.create_message_slice();
 
-            },
-        }
+        let buf = [
+            self.password[0],
+            self.password[1],
+            self.password[2],
+            self.password[3],
+            message_buf[0],
+            message_buf[1],
+            message_buf[2],
+            message_buf[3],
+            message_buf[4],
+            message_buf[5],
+            message_buf[6],
+            message_buf[7],
+            message_buf[8],
+            message_buf[9],
+            message_buf[10],
+            message_buf[11],
+            message_buf[12],
+            message_buf[13],
+            message_buf[14],
+            message_buf[16],
+        ];
 
-        packet.copy_from_slice(message);
+        packet.copy_from_slice(&buf);
+
+      
         let mut cycles_passed = 0;
 
         while self.timeout >= cycles_passed {
@@ -140,36 +168,6 @@ impl Radio<'_> {
 
         
     }
-
-    /// # Preface
-    /// Microbit radios communicate using the IEEE 802.15.4 standard they dont use any sort of identification when messages are sent
-    /// So basically you have a whole bunch of devices communicating with eachother with no way to identify who the device is.
-    /// This might be good if you're in an environment like your house where you would only have one or two Microbits communicating at the same time
-    /// but this becomes a problem at competitions where there are 5+ different microbits sending their own signals.
-    /// 
-    /// The old solution would just have people using different wavelengths, which works completely fine. This system is here to cut the communication out.
-    /// 
-    /// ( still go talk to the other teams though, be nice )
-    /// 
-    /// # Usage
-    /// 
-    /// Setting the password enables the password across all commands. (except read_to_serial)'
-    /// 
-    /// The password is 3 bytes long and whatever message recieved will check if the first three bytes match the passwords three bytes.
-    /// if they dont match eachother then immediately stop reading the message.
-    /// otherwise continue to read the message and go through the function like usual.
-    /// 
-    /// **Note: Even though the word "password" is used, the code isnt really made to be secret. Identification bytes would probably be a more suitable name
-    /// but I like password more**
-    pub fn set_password(&mut self, pass:[u8;3]) {
-        self.password = Some(pass);
-    }
-
-    /// Stop using the password you set
-    pub fn disable_password(&mut self) {
-        self.password = None;
-    }
-
 
     /// set the amount of time to wait while sending a message before giving up.
     pub fn set_timeout(&mut self, new_timeout:u32) {
