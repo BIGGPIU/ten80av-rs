@@ -58,5 +58,7 @@
 
 
 pub mod serial;
+    mod serial_structs;
+    pub use serial_structs::*; 
 pub mod ports;
 pub mod display;

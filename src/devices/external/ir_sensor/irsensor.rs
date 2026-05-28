@@ -1,6 +1,6 @@
 use microbit::hal::saadc::Channel;
 
-use crate::utils::serial::Serial;
+use crate::utils::{IRSensorMessage, serial::Serial};
 
 /// Controller for External IR Sensors
 pub struct IRSensor<T>
@@ -10,6 +10,7 @@ where T: microbit::hal::saadc::Channel
     channel:T,
     offset:i16,
 }
+
 
 
 
@@ -61,4 +62,6 @@ impl<T:Channel> IRSensor<T> {
     pub fn measure_no_offset(&mut self, controller: &mut crate::devices::external::analogdevicecontroller::AnalogDeviceController) -> i16{
         controller.controller.read_channel(&mut self.channel).unwrap()
     }
+
+    
 }

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Creating your library folder - Ten80 Autonomous Vehicle Book</title>
+        <title>Getting Started - Ten80 Autonomous Vehicle Book</title>
 
 
         <!-- Custom HTML head -->
@@ -174,41 +174,39 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="creating-your-library-folder"><a class="header" href="#creating-your-library-folder">Creating your library folder</a></h1>
-<h2 id="creating-your-library-folder-with-cargo"><a class="header" href="#creating-your-library-folder-with-cargo">Creating your Library folder with Cargo</a></h2>
-<p>Before we start, you should have a folder for all of your rust projects then open that folder in your terminal.</p>
-<p>Once you have your project folder open run the following commands</p>
-<pre><code class="language-cmd">$ cargo new --lib ten80-av-library
-$ cd ten80-av-library
-$ code . 
+                        <h1 id="getting-started-with-ten80av-rs"><a class="header" href="#getting-started-with-ten80av-rs">Getting Started with ten80av-rs</a></h1>
+<p>This part of the guide assumes that you have some experience in rust. If you are completely unfamiliar with rust then please refer to chapter 2 of this book.</p>
+<h2 id="creating-your-rust-project"><a class="header" href="#creating-your-rust-project">Creating your rust project</a></h2>
+<p>Before we can get started writing any code we have to create the project (or crate) that will hold said code. to do this open your favorite terminal in the folder you wish to craete your project in and enter the following commands</p>
+<pre><code class="language-not_rust">$ cargo new ten80-av
+$ cd ten80-av
 </code></pre>
-<h2 id="your-project-structure"><a class="header" href="#your-project-structure">Your project structure</a></h2>
-<p>When VSCode opens you should be able to see your library folder. this folder looks relatively similar to what you would get if you ran cargo new without the <code>--lib</code> argument. there are a few key differences though</p>
-<pre><code>ten80-av-library
-├── src
-│   └── lib.rs
-├── target
-│   ├── debug
-│   ├── flycheck0
-│   ├── .rustc_info_json
-│   └── CACHEDIR.TAG
-├── Cargo.lock
-└── Cargo.toml
+<p>after you run those commands, if you are using vs code then type</p>
+<pre><code class="language-not_rust">$ code . 
 </code></pre>
-<p>The main difference is <strong>lib.rs</strong> this file is kind of like <code>main.rs</code> but instead of it holding all of your code it instead holds the modules for your library as well as some introductory documentation for your library.</p>
-<p><strong>Before moving on to the next part of this chapter: please go into lib.rs and delete all of the placeholder code that is in the file.</strong></p>
+<p>to open your project in vs code</p>
+<h2 id="installing-dependencies"><a class="header" href="#installing-dependencies">installing dependencies</a></h2>
+<h3 id="using-the-command-line"><a class="header" href="#using-the-command-line">Using the command line</a></h3>
+<p>with your terminal open in the folder that has your rust project run the following command to install the ten80av_rs library and another library that you will need to properly use ten80av_rs</p>
+<pre><code class="language-not_rust">$ cargo add ten80av-rs
+$ cargo add microbit-v2
+$ cargo add cortex-m-rt
+</code></pre>
+<h3 id="using-cargotoml"><a class="header" href="#using-cargotoml">Using <code>Cargo.toml</code></a></h3>
+<p>Open your <code>Cargo.toml</code> inside of a text editor and copy the following lines under “[dependencies]”</p>
+<pre><code class="language-toml">ten80av-rs = "1.0.0"
+microbit-v2 = "0.16.0"
+cortex-m-rt = "0.7.5"
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../3-making-your-library/intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../4-using-ten80av-rs/intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../../3-making-your-library/2-no_std/nostd.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -216,13 +214,10 @@ $ code .
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../3-making-your-library/intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../4-using-ten80av-rs/intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../../3-making-your-library/2-no_std/nostd.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
-                    </a>
             </nav>
 
         </div>
