@@ -37,9 +37,21 @@
 mod reciever;
 mod sender;
 
+#[cfg(not(feature = "calcru-serial-standard"))]
 pub use reciever::radio::Radio as RecieverRadio;
+#[cfg(not(feature = "calcru-serial-standard"))]
 pub use sender::radio::Radio as SenderRadio;
+#[cfg(not(feature = "calcru-serial-standard"))]
 pub use reciever::radio::RadioError as RecieverError;
+#[cfg(not(feature = "calcru-serial-standard"))]
 pub use sender::radio::Radio as SenderError;
+#[cfg(feature = "calcru-serial-standard")]
+pub use reciever::calvert_cruisers_radio::CalverCruisersStandardRadio as RecieverRadio;
+#[cfg(feature = "calcru-serial-standard")]
+pub use sender::calvert_cruisers_radio::CalverCruisersStandardRadio as SenderRadio;
+#[cfg(feature = "calcru-serial-standard")]
+pub use reciever::calvert_cruisers_radio::RadioError as RecieverError;
+#[cfg(feature = "calcru-serial-standard")]
+pub use sender::calvert_cruisers_radio::RadioError as SenderError;
 
 pub(crate) const PASSWORDLENGTH:usize = 4;

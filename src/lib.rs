@@ -224,12 +224,12 @@
 //! ```
 
 
-// #[cfg(feature = "std")]
+#[cfg(feature = "std")]
 extern crate std;
 
 #[cfg(not(feature = "std"))]
 pub mod devices;
 #[cfg(not(feature = "std"))]
 pub mod utils;
-// #[cfg(feature = "graphing")]
+#[cfg(feature = "graphing")]
 pub mod graphing;

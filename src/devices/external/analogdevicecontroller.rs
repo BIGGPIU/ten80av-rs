@@ -1,6 +1,7 @@
 use microbit::{hal::{Saadc, Timer}, pac::TIMER0};
-use crate::{devices::external::{IRSensor, UltraSonicDistanceSensor, UltrasonicDistanceSensorError}, utils::{IRSensorMessage, UltraSonicDistanceSensorMessage, serial::Serial}};
-
+use crate::{devices::external::{IRSensor, UltraSonicDistanceSensor, UltrasonicDistanceSensorError}, utils::serial::Serial};
+#[cfg(feature = "calcru-serial-standard")]
+use crate::utils::{IRSensorMessage, UltraSonicDistanceSensorMessage};
 
 
 
@@ -49,7 +50,7 @@ impl AnalogDeviceController {
         }
     }
 
-
+    #[cfg(feature = "calcru-serial-standard")]
     /// Creates a message with the IR Sensors Current value (including the offset). this message can then be used to be sent over the Radio or to a computer through the
     /// serial (UART)
     pub fn create_ir_sensor_message
@@ -64,7 +65,7 @@ impl AnalogDeviceController {
         )
     }
 
-
+    #[cfg(feature = "calcru-serial-standard")]
     /// Creates a message with the UDS Current value (not in centimeters). this message can then be used to be sent over the Radio or to a computer through the
     /// serial (UART)
     pub fn create_ultrasonic_distance_sensor_message(uds:&mut UltraSonicDistanceSensor,timer:&mut Timer<TIMER0>) -> Result<UltraSonicDistanceSensorMessage,UltrasonicDistanceSensorError> {

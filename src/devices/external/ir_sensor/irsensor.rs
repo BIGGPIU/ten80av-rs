@@ -1,6 +1,8 @@
 use microbit::hal::saadc::Channel;
 
-use crate::utils::{IRSensorMessage, serial::Serial};
+use crate::utils::serial::Serial;
+#[cfg(feature = "calcru-serial-standard")]
+use crate::utils::IRSensorMessage;
 
 /// Controller for External IR Sensors
 pub struct IRSensor<T>

@@ -4,7 +4,10 @@
 use embedded_hal::{delay::DelayNs, digital::{InputPin, OutputPin}};
 use microbit::{hal::{ Timer, gpio::{Input, Output, PullUp, PushPull}}, pac::{TIMER0}};
 
-use crate::utils::{UltraSonicDistanceSensorMessage, serial::Serial};
+use crate::utils::serial::Serial;
+#[cfg(feature = "calcru-serial-standard")]
+use crate::utils::UltraSonicDistanceSensorMessage;
+
 
 pub enum UltrasonicDistanceSensorError {
     Timeout,
@@ -169,6 +172,7 @@ impl UltraSonicDistanceSensor {
 
     }
 
+    #[cfg(feature = "calcru-serial-standard")]
     /// Creates a message with the UDS Current value (not in centimeters). this message can then be used to be sent over the Radio or to a computer through the
     /// serial (UART)
     pub fn create_ultrasonic_distance_sensor_message(&mut self, timer:&mut Timer<TIMER0>) -> Result<UltraSonicDistanceSensorMessage,UltrasonicDistanceSensorError> {
