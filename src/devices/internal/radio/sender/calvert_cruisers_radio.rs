@@ -5,6 +5,7 @@ use microbit::hal::ieee802154::{self, Packet};
 use microbit::pac::TIMER0;
 use core::fmt::Write;
 
+use crate::devices::internal::radio::PASSWORDLENGTH;
 use crate::utils::MicrobitMessageFormat;
 use crate::utils::serial::Serial;
 
@@ -30,7 +31,7 @@ pub enum RadioError {
 /// * CCSR sends messages in 20 byte messages rather versus the 16 byte long messages sent with Radio
 pub struct CalverCruisersStandardRadio<'a> {
     controller:microbit::hal::ieee802154::Radio<'a>,
-    password:[u8;4],
+    password:[u8;PASSWORDLENGTH],
     timeout:u32,
 }
 
@@ -54,7 +55,7 @@ impl CalverCruisersStandardRadio<'_> {
         board_radio:microbit::pac::RADIO,
         clocks:&'a Clocks<ExternalOscillator, microbit::hal::clocks::Internal, microbit::hal::clocks::LfOscStopped>,
         channel:ieee802154::Channel,
-        password:[u8;4],
+        password:[u8;PASSWORDLENGTH],
         timeout:u32,
         serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>
     ) -> CalverCruisersStandardRadio<'a> {
@@ -88,7 +89,7 @@ impl CalverCruisersStandardRadio<'_> {
         board_radio:microbit::pac::RADIO,
         clocks:&'a Clocks<ExternalOscillator, microbit::hal::clocks::Internal, microbit::hal::clocks::LfOscStopped>,
         channel:ieee802154::Channel,
-        password:[u8;4],
+        password:[u8;PASSWORDLENGTH],
         timeout:u32
     ) -> CalverCruisersStandardRadio<'a> {
 

@@ -1,3 +1,4 @@
+use crate::devices::internal::radio::PASSWORDLENGTH;
 use crate::utils::serial::Serial;
 
 use microbit::hal::Timer;
@@ -23,7 +24,7 @@ pub enum RadioError {
 /// Reciever Radio For the Micro:bit V2
 pub struct Radio<'a> {
     controller:microbit::hal::ieee802154::Radio<'a>,
-    password:Option<[u8;3]>,
+    password:Option<[u8;PASSWORDLENGTH]>,
     timeout:u32,
 
 }
@@ -232,14 +233,14 @@ impl Radio<'_> {
         }
     }
 
-    fn read_message_with_password(password:[u8;3],packet:Packet,bad_crc:bool) -> Result<[u8;16], RadioError>{
+    fn read_message_with_password(password:[u8;PASSWORDLENGTH],packet:Packet,bad_crc:bool) -> Result<[u8;16], RadioError>{
         let mut message_buf = [245;16];
 
 
         let mut packet_iter = packet.iter();
         
         // check to see if the password bytes are right
-        for p in 0..3 {
+        for p in 0..PASSWORDLENGTH {
             let m = match packet_iter.next() {
                 Some(x) => x,
                 None => {
@@ -294,7 +295,7 @@ impl Radio<'_> {
     /// 
     /// **Note: Even though the word "password" is used, the code isnt really made to be secret. Identification bytes would probably be a more suitable name
     /// but I like password more**
-    pub fn set_password(&mut self, pass:[u8;3]) {
+    pub fn set_password(&mut self, pass:[u8;PASSWORDLENGTH]) {
         self.password = Some(pass);
     }
 

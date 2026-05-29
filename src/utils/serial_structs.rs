@@ -115,6 +115,7 @@ impl MicrobitMessageFormat for IRSensorMessage {
     }
 }
 
+
 pub struct RadioMessage {
     identifier:u8,
     

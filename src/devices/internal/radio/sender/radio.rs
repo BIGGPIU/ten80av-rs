@@ -5,7 +5,9 @@ use microbit::hal::ieee802154::{self, Packet};
 use microbit::pac::TIMER0;
 use core::fmt::Write;
 
+use crate::devices::internal::radio::PASSWORDLENGTH;
 use crate::utils::serial::Serial;
+
 
 
 pub enum RadioError {
@@ -18,7 +20,7 @@ pub enum RadioError {
 /// Sender Radio For the Micro:bit V2
 pub struct Radio<'a> {
     controller:microbit::hal::ieee802154::Radio<'a>,
-    password:Option<[u8;3]>,
+    password:Option<[u8;PASSWORDLENGTH]>,
     timeout:u32,
 
 }
@@ -161,7 +163,7 @@ impl Radio<'_> {
     /// 
     /// **Note: Even though the word "password" is used, the code isnt really made to be secret. Identification bytes would probably be a more suitable name
     /// but I like password more**
-    pub fn set_password(&mut self, pass:[u8;3]) {
+    pub fn set_password(&mut self, pass:[u8;4]) {
         self.password = Some(pass);
     }
 
