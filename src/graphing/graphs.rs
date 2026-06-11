@@ -1,198 +1,65 @@
-use piston_window::{EventLoop, PistonWindow, WindowSettings};
-use plotters::prelude::*;
-use plotters_piston::{draw_piston_window};
-use std::{collections::VecDeque, vec::Vec};
+use std::{boxed::Box, collections::VecDeque, vec::Vec};
+use std::{vec};
+use egui_plot::LegendGrouping::ByName;
+use egui_plot::{Legend, Line, Plot, PlotPoints};
 
-const MAXITEMSINITEMVEC:usize = 10;
+const MAXITEMSINITEMVEC:usize = 50;
 
 pub struct Graphing;
 
+pub enum GraphSize {
+    Small,
+    Medium,
+    Large,
+    XLarge,
+    Full,
+}
+
+impl Into<u32> for GraphSize {
+    fn into(self) -> u32 {
+        match self {
+            GraphSize::Small => 1000,
+            GraphSize::Medium => 2000,
+            GraphSize::Large => 4000,
+            GraphSize::XLarge => 10_000,
+            GraphSize::Full => u32::MAX,
+        }
+    }
+}
+
+
 #[derive(Debug,Clone)]
-enum BroadcastMessages {
+pub enum BroadcastMessages {
     /// Remove(index)
     Remove(usize),
     // Update(index,value)
     Update(usize,f32),
-    /// Add(v)
-    Add(Option<VecDeque<f32>>)
+    /// Add(value,name)
+    Add(Option<VecDeque<f32>>,&'static str)
 }
 
-pub struct GrapingWindow {
-    fps:u8,
-    length:u8,
-    window:PistonWindow,
-    broadcast_reader:tokio::sync::broadcast::Receiver<BroadcastMessages>
-}
-/// NOTE: RENAME THIS IDK WHAT ITS GONNA LOOK LIKE RIGHT NOW SO i JUST GAVE IT THE FIRST NAME THAT CAME TO MY MIND 
-pub struct ItemQueue {
-    broadcast_writer:tokio::sync::broadcast::Sender<BroadcastMessages>
-    // queue:Arc<RwLock<Vec<VecDeque<f32>>>>
-}
-
-
-impl ItemQueue {
-
-
-    pub async fn add_value_to_item(&self, index:usize,value:f32) {
-        self.broadcast_writer.send(BroadcastMessages::Update(index, value)).unwrap();
-    } 
-
-    /// adds a new VecDequeue to the queue
-    pub async fn add_item_to_queue(&self,item:Option<VecDeque<f32>>) {
-        self.broadcast_writer.send(BroadcastMessages::Add(item)).unwrap();
-    }
-
-
-    /// im trusting you to use this responsibly
-    pub async fn remove_item_from_queue(&self, index:usize) {
-        self.broadcast_writer.send(BroadcastMessages::Remove(index)).unwrap();
-    }
-
-}
-
-impl Graphing {
-    pub fn init_graph(
-        fps:u8,
-        length:u8,
-        fullscreen:bool,
-    ) -> (GrapingWindow,ItemQueue) {
-        // configure the window
-        let mut window:PistonWindow = WindowSettings::new("ten80av_rs graph",[400,400])
-            .fullscreen(fullscreen)
-            .exit_on_esc(true)
-        .build()
-        .unwrap();
-
-        let (broadcast_writer,broadcast_reader) = tokio::sync::broadcast::channel(32);
-
-        window.set_max_fps(fps as u64);
-        return (
-            GrapingWindow {
-                fps,
-                length,
-                window,
-                broadcast_reader
-            },
-            ItemQueue{
-                broadcast_writer,
-            } 
-        )
-
-        
-
-    }
-
-    // so our reader will read data from vectors
-    // so how do we update the vectors?
-    // maybe have 
-    
-
-    // because the window cant be sent between threads with async and shit maybe flip around our thinking?
-    // have gathering data be async and reporting it sync
-    // so the itemdata stuff would live inside of the spawn window thing. the broadcasts would be used to basically check
-    // "hey? is there any more data for me to use?"
-    // the user would use the exposed ItemQueue thing to communicate with the spawn_window thing
-
-    pub fn spawn_window(mut window:GrapingWindow,items:&ItemQueue){
-        
-        let data_points = (window.fps * window.length) as usize;
-        let mut local_state: Vec<VecDeque<f32>> = Vec::new();
-        // set up the hot loop or whatever you want to call it 
-
-        
-
-        while let Some(_) = draw_piston_window(&mut window.window, |b| {
-            let root = b.into_drawing_area();
-            root.fill(&WHITE)?;
-            
-            {
-                loop {
-                    match window.broadcast_reader.try_recv() {
-                        Ok(message) => {
-                            Graphing::parse_broadcast_message(message, &mut local_state);
-                        },
-                        Err(e) => {
-                            match e {
-                                tokio::sync::broadcast::error::TryRecvError::Empty => {
-                                    break;
-                                },
-                                _ => {
-                                    panic!("tokio: {e:?}")
-                                }
-                            }
-                        },
-                    }
-                }
-            }
-            
-            
-            let mut cc = ChartBuilder::on(&root)
-                .margin(10)
-                .caption("AV Sensor Data. ESC to exit", ("sans serif",30))
-                .x_label_area_size(40)
-                .y_label_area_size(50)
-            .build_cartesian_2d(0..data_points as u32, 0f32..1f32).unwrap();
-
-            cc.configure_mesh()
-            .x_label_formatter(&|x| std::format!("{}", -(window.length as f32) + (*x as f32 / window.fps as f32)))
-            .y_label_formatter(&|y| std::format!("{}%", (*y * 100.0) as u32))
-            .x_labels(15)
-            .y_labels(5)
-            .x_desc("Seconds")
-            .y_desc("Sensor Value")
-            .axis_desc_style(("sans-serif", 15))
-            .draw()?;
-
-            for (index,data) in (0..).zip(local_state.iter()) {
-                cc.draw_series(LineSeries::new(
-                    (0..).zip(data.iter())
-                    .map(|(idx,data_idx)| (idx, *data_idx))
-                    , &Palette99::pick(index)
-                ))?
-                .label(std::format!("Sensor {}",index))
-                .legend(move |(x,y)| {
-                    Rectangle::new([(x - 5, y - 5), (x + 5, y + 5)], &Palette99::pick(index))
-                });
-
-
-            }
-
-            cc.configure_series_labels()
-            .background_style(&WHITE.mix(0.8))
-            .border_style(&BLACK)
-            .draw()?;
-
-            Ok(())
-        
-        }) {
-
-        };
-
-        panic!("Window closed.")
-    }
-    
-
-    fn parse_broadcast_message(message:BroadcastMessages,item_vec:&mut Vec<VecDeque<f32>>) {
+impl BroadcastMessages {
+    pub(crate) fn parse_broadcast_message(message:BroadcastMessages,item_vec:&mut Vec<GraphItem>) {
         match message {
             BroadcastMessages::Remove(index) => {
                 item_vec.remove(index);
             },
             BroadcastMessages::Update(index, value) => {
-                if  MAXITEMSINITEMVEC > item_vec[index].len()  {
-                    item_vec[index].push_front(value);
+                if  MAXITEMSINITEMVEC > item_vec[index].vec.len()  {
+                    item_vec[index].vec.push_front(value);
                 }
                 else {
-                    item_vec[index].pop_back(); 
-                    item_vec[index].push_front(value);
+                    item_vec[index].vec.pop_back(); 
+                    item_vec[index].vec.push_front(value);
                 }
             },
-            BroadcastMessages::Add(items) => {
+            BroadcastMessages::Add(items,name) => {
                 match items {
                     Some(x) => {
-                        item_vec.push(x);
+                        item_vec.push(GraphItem { name, vec: x });
                     },
                     None => {
-                        item_vec.push(VecDeque::new());
+                        item_vec.push(GraphItem { name, vec: VecDeque::new() });
                     },
                 }
             },
@@ -200,5 +67,151 @@ impl Graphing {
     }
 }
 
+/// Graphing window struct that is visible to the user
+struct GraphingWindow {
+    broadcast_reader:tokio::sync::broadcast::Receiver<BroadcastMessages>,
+    /// this is a list of line points
+    /// so like this 
+    /// [
+    /// [1.0,1.0,1.0]
+    /// [1.0,1.0,0.9]
+    /// ]
+    /// (this is a straight line and another straightish line)
+    line_state:Vec<GraphItem>,
+    /// whats the highest value you expect to see?
+    expected_max_value:u32,
+}
 
-// todo: make all the messages work off of an id rather than an index. I dont trust y'all niggas 
+
+/// Queue that is able to write to ItemQueueReader. 
+/// 
+/// The primary use of this structure is to write information to your graph.
+pub struct ItemQueue {
+    broadcast_writer:tokio::sync::broadcast::Sender<BroadcastMessages>
+}
+
+pub struct ItemQueueReader {
+    broadcast_reader:tokio::sync::broadcast::Receiver<BroadcastMessages>
+}
+
+pub(crate) struct GraphItem {
+    name:&'static str,
+    vec:VecDeque<f32>
+}
+
+impl ItemQueue {
+
+
+
+    /// adds a new data point to a line
+    pub async fn add_point_to_line(&self, index:usize,value:f32) {
+        self.broadcast_writer.send(BroadcastMessages::Update(index, value)).unwrap();
+    } 
+
+    /// Adds a new line to the graph
+    pub async fn add_new_line(&self,item:Option<VecDeque<f32>>,name:&'static str) {
+        self.broadcast_writer.send(BroadcastMessages::Add(item,name)).unwrap();
+    }
+
+
+    /// delete a line based off the index of it 
+    pub async fn delete_line(&self, index:usize) {
+        self.broadcast_writer.send(BroadcastMessages::Remove(index)).unwrap();
+    }
+
+}
+
+impl Graphing {
+    /// configures a window with the default settings and returns it alongside an ItemQueue reader and writer.
+    /// 
+    /// this function was made to be used alongside `spawn_window()`
+    pub fn make_window() -> (
+        eframe::NativeOptions,
+        ItemQueue,
+        ItemQueueReader
+    ) {
+
+        
+
+        let (broadcast_writer,broadcast_reader) = tokio::sync::broadcast::channel(32);
+        return (
+            eframe::NativeOptions::default(),
+            ItemQueue { broadcast_writer },
+            ItemQueueReader { broadcast_reader }
+        )
+    }
+
+    /// creates a window.
+    /// 
+    /// The arguments to this function can be retrieved through Graphing::make_window
+    pub fn spawn_window(window:eframe::NativeOptions,broadcast_reader: ItemQueueReader, graph_size:GraphSize){ 
+        eframe::run_native("ten80av_rs graph", window,
+        Box::new(
+            |_| 
+            Ok(
+                Box::new(
+                    GraphingWindow::new(broadcast_reader.broadcast_reader,graph_size)
+                )
+            ))).unwrap();
+    }
+    
+
+    
+}
+
+
+impl GraphingWindow {
+    fn new(broadcast_reader: tokio::sync::broadcast::Receiver<BroadcastMessages>, graph_size:GraphSize) -> Self {
+        Self { broadcast_reader, line_state:vec![], expected_max_value: graph_size.into() }
+    }
+}
+
+impl eframe::App for GraphingWindow {
+    fn ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
+        ui.request_repaint();
+
+        // check if the queue has any new messages 
+        match self.broadcast_reader.try_recv() {
+            Ok(message) => {
+                BroadcastMessages::parse_broadcast_message(message, &mut self.line_state);
+            },
+            Err(_) => {
+                // do nothing and do not update the graph
+            },
+        }
+
+        // is this really something I want to have in a "hotloop"
+        let mut points_list:Vec<Line> = Vec::new();
+        for points in self.line_state.iter() {
+            let temp_points:PlotPoints = (0..points.vec.len())
+            .map(|pos| {
+                [pos as f64,points.vec[pos] as f64 ]   
+            }).collect();
+
+            points_list.push(
+                Line::new(points.name, temp_points)
+            )
+        }
+
+        let legend = Legend::default()
+        .title("Sensors")
+        .grouping(ByName);
+
+        Plot::new("diddyplot :skull: those who know")
+        .allow_axis_zoom_drag(false)
+        .allow_drag(false)
+        .allow_scroll(false)
+        .allow_zoom(false)
+        .default_y_bounds(0.0, self.expected_max_value as f64)
+        .default_x_bounds(0.0, MAXITEMSINITEMVEC as f64)
+        .legend(legend)
+        .show_crosshair(false)
+        .x_axis_label("Cycles Past")
+        .show(ui, |plot_ui| {
+            for i in points_list {
+                plot_ui.line(i);
+            }
+        });
+
+    }
+}

@@ -137,7 +137,7 @@ impl CalverCruisersStandardRadio<'_> {
             message_buf[12],
             message_buf[13],
             message_buf[14],
-            message_buf[16],
+            message_buf[15],
         ];
 
         packet.copy_from_slice(&buf);
