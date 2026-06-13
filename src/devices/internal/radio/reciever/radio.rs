@@ -40,7 +40,8 @@ impl Radio<'_> {
     ///     
     /// board_radio: From Board.RADIO,
     ///     
-    /// clocks: Reference from Board.CLOCKS,
+    /// clocks: Reference from &microbit::hal::Clocks::new(board.clocks).enable_ext_hfosc(),
+    /// (you will get a reference error if you dont initialize this beforehand)
     ///     
     /// channel: What channel you want the radio to listen in on
     ///     
@@ -76,10 +77,11 @@ impl Radio<'_> {
     ///     
     /// board_radio: From Board.RADIO,
     ///     
-    /// clocks: Reference from Board.CLOCKS,
+    /// clocks: Reference from &microbit::hal::Clocks::new(board.clocks).enable_ext_hfosc(),
+    /// (you will get a reference error if you dont initialize this beforehand)
     ///     
     /// channel: What channel you want the radio to listen in on
-    ///     
+    /// 
     /// timeout: How long IN MICROSECONDS do you want to wait to recieve something 
     /// 
     /// )

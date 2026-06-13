@@ -63,6 +63,27 @@ impl MicrobitMessageFormat for UltraSonicDistanceSensorMessage {
     }
 }
 
+/// This struct only exists to eventually be turned into IRSensorMessage.
+/// 
+/// **this cannot be sent over the radio or serial**.
+pub struct IRSensorMessagePart {
+    pub ir_value:i16
+}
+
+impl IRSensorMessagePart {
+    pub fn new_with_values(val:i16) -> Self {
+        Self {
+            ir_value: val,
+        }
+    }
+}
+
+impl Into<i16> for IRSensorMessagePart {
+    fn into(self) -> i16 {
+        self.ir_value
+    }
+}
+
 pub struct IRSensorMessage {
     identifier:u8,
     pub left_ir_value:i16,
@@ -78,11 +99,12 @@ impl IRSensorMessage {
         }
     }
 
-    pub fn new_with_values(left_ir_value:i16,right_ir_value:i16) -> Self {
+    pub fn new_with_values(left_ir_value:impl Into<i16>,right_ir_value:impl Into<i16>) -> Self {
+        
         return Self {
             identifier: IR_SENSOR_IDENTIFIER,
-            left_ir_value,
-            right_ir_value,
+            left_ir_value: left_ir_value.into(),
+            right_ir_value: right_ir_value.into(),
         }
     }
 }

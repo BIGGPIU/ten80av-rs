@@ -68,6 +68,29 @@ impl UltraSonicDistanceSensor {
 
 
 
+    #[cfg(feature = "calcru-serial-standard")]
+    /// the same as measure_raw but it serializes straight into a message you can send through radio
+    pub fn measure_into_message(&mut self, timer:&mut Timer<TIMER0>) ->  Result<UltraSonicDistanceSensorMessage,UltrasonicDistanceSensorError> {
+        self.send_trigger_pulse(timer);
+
+        let _echo_start = match self.wait_for_echo_start(timer) {
+            Ok(x) => x,
+            Err(_) => {
+                // write!(serial,"error: {e:?} \r\n").unwrap();
+                return Err(UltrasonicDistanceSensorError::Timeout)
+            },
+        };
+
+        let pulse_width = match self.wait_for_echo_end(timer) {
+            Ok(x) => x,
+            Err(_e) => { 
+                return Err(UltrasonicDistanceSensorError::Timeout)
+            },
+        };
+
+        return Ok(UltraSonicDistanceSensorMessage::new_with_values(pulse_width))
+    }
+
     /// Measure the amount of time its takes for the UltraSonicDistanceSensor to detect an object
     pub fn measure_raw(&mut self, timer:&mut Timer<TIMER0>) -> Result<u32,UltrasonicDistanceSensorError> {
         self.send_trigger_pulse(timer);

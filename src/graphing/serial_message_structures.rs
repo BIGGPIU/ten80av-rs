@@ -1,3 +1,4 @@
+#[cfg(feature = "calcru-serial-standard")]
 use crate::graphing::{IR_SENSOR_IDENTIFIER, MAGNOMETER_MESSAGE_IDENTIFIER, RADIO_MESSAGE_IDENTIFIER, ULTRASONIC_DISTANCE_SENSOR_IDENTIFIER};
 
 pub trait SerialMessage {
@@ -7,11 +8,12 @@ pub trait SerialMessage {
     /// Serializes a message into the struct. useful for having your own custom serial messages.
     fn serialize_message(full_buffer:[u8;20]) -> Self;
 }
-
+#[cfg(feature = "calcru-serial-standard")]
 pub struct UltraSonicDistanceSensorMessage {
     pub value:u32,
 }
 
+#[cfg(feature = "calcru-serial-standard")]
 impl SerialMessage for UltraSonicDistanceSensorMessage {
     fn identifier_matches(identifier:u8) -> bool {
         identifier == ULTRASONIC_DISTANCE_SENSOR_IDENTIFIER
@@ -36,7 +38,7 @@ pub struct IRSensorMessage {
     pub right_ir_value:i16,
 }
 
-
+#[cfg(feature = "calcru-serial-standard")]
 impl SerialMessage for IRSensorMessage {
     fn identifier_matches(identifier:u8) -> bool {
         identifier == IR_SENSOR_IDENTIFIER
@@ -56,11 +58,12 @@ impl SerialMessage for IRSensorMessage {
     }
 }
 
-
+#[cfg(feature = "calcru-serial-standard")]
 pub struct RadioMessage {
     pub message:[u8;11]
 }
 
+#[cfg(feature = "calcru-serial-standard")]
 impl SerialMessage for RadioMessage {
     fn identifier_matches(identifier:u8) -> bool {
         identifier == RADIO_MESSAGE_IDENTIFIER
@@ -76,14 +79,14 @@ impl SerialMessage for RadioMessage {
 }
 
 
-
+#[cfg(feature = "calcru-serial-standard")]
 pub struct MagnometerMessage {
     pub x_value:i16,
     pub y_value:i16,
     pub z_value:i16,
 }
 
-
+#[cfg(feature = "calcru-serial-standard")]
 impl SerialMessage for MagnometerMessage {
     fn identifier_matches(identifier:u8) -> bool {
         MAGNOMETER_MESSAGE_IDENTIFIER == identifier

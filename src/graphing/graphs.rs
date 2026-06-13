@@ -8,6 +8,7 @@ const MAXITEMSINITEMVEC:usize = 50;
 pub struct Graphing;
 
 pub enum GraphSize {
+    XSmall,
     Small,
     Medium,
     Large,
@@ -18,6 +19,7 @@ pub enum GraphSize {
 impl Into<u32> for GraphSize {
     fn into(self) -> u32 {
         match self {
+            GraphSize::XSmall => 100,
             GraphSize::Small => 1000,
             GraphSize::Medium => 2000,
             GraphSize::Large => 4000,
@@ -98,6 +100,7 @@ pub(crate) struct GraphItem {
     name:&'static str,
     vec:VecDeque<f32>
 }
+
 
 impl ItemQueue {
 

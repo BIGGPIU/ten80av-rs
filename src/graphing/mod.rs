@@ -14,7 +14,9 @@ pub const MAGNOMETER_MESSAGE_IDENTIFIER:u8 = 3;
 mod serial_message_structures;
 mod graphs;
 
+#[cfg(feature = "graphing")]
 pub use graphs::{ItemQueueReader,ItemQueue,Graphing,GraphSize};
+
 #[cfg(not(feature = "calcru-serial-standard"))]
 pub use serial_message_structures::SerialMessage;
 #[cfg(feature = "calcru-serial-standard")]

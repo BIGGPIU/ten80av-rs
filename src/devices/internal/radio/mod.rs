@@ -46,12 +46,14 @@ pub use reciever::radio::RadioError as RecieverError;
 #[cfg(not(feature = "calcru-serial-standard"))]
 pub use sender::radio::Radio as SenderError;
 #[cfg(feature = "calcru-serial-standard")]
-pub use reciever::calvert_cruisers_radio::CalverCruisersStandardRadio as RecieverRadio;
+pub use reciever::calvert_cruisers_radio::CalverCruisersStandardRecieverRadio as RecieverRadio;
 #[cfg(feature = "calcru-serial-standard")]
-pub use sender::calvert_cruisers_radio::CalverCruisersStandardRadio as SenderRadio;
+pub use sender::calvert_cruisers_radio::CalvertCruisersStandardSenderRadio as SenderRadio;
 #[cfg(feature = "calcru-serial-standard")]
 pub use reciever::calvert_cruisers_radio::RadioError as RecieverError;
 #[cfg(feature = "calcru-serial-standard")]
 pub use sender::calvert_cruisers_radio::RadioError as SenderError;
+#[cfg(feature = "calcru-serial-standard")]
+pub use reciever::calvert_cruisers_radio::{RadioRecievedMessages,XValue,YValue,ZValue,LeftIRValue,RightIRValue};
 
 pub(crate) const PASSWORDLENGTH:usize = 4;

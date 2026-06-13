@@ -44,7 +44,7 @@ pub enum RadioRecievedMessages {
 }
 
 /// Reciever Radio For the Micro:bit V2
-pub struct CalverCruisersStandardRadio<'a> {
+pub struct CalverCruisersStandardRecieverRadio<'a> {
     controller:microbit::hal::ieee802154::Radio<'a>,
     password:[u8;4],
     timeout:u32,
@@ -53,7 +53,7 @@ pub struct CalverCruisersStandardRadio<'a> {
 
 
 
-impl CalverCruisersStandardRadio<'_> {
+impl CalverCruisersStandardRecieverRadio<'_> {
 
 
     /// Initialize the radio.
@@ -62,9 +62,12 @@ impl CalverCruisersStandardRadio<'_> {
     ///     
     /// board_radio: From Board.RADIO,
     ///     
-    /// clocks: Reference from Board.CLOCKS,
+    /// clocks: Reference from &microbit::hal::Clocks::new(board.clocks).enable_ext_hfosc(),
+    /// (you will get a reference error if you dont initialize this beforehand)
     ///     
     /// channel: What channel you want the radio to listen in on
+    /// 
+    /// password: What the password should be 
     ///     
     /// timeout: How long IN MICROSECONDS do you want to wait to recieve something 
     /// 
@@ -76,7 +79,7 @@ impl CalverCruisersStandardRadio<'_> {
         password:[u8;4],
         timeout:u32,
         serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>
-    ) -> CalverCruisersStandardRadio<'a> {
+    ) -> CalverCruisersStandardRecieverRadio<'a> {
 
         // write!(serial, "initiating radio... \r\n").unwrap();
         
@@ -90,7 +93,7 @@ impl CalverCruisersStandardRadio<'_> {
         Serial::write(serial,"Successfully Initialized Radio", crate::utils::serial::MessageSeverity::OK);
 
         
-        return CalverCruisersStandardRadio { controller:  radio, timeout, password};
+        return CalverCruisersStandardRecieverRadio { controller:  radio, timeout, password};
     }
 
     /// Initialize the radio.
@@ -99,9 +102,12 @@ impl CalverCruisersStandardRadio<'_> {
     ///     
     /// board_radio: From Board.RADIO,
     ///     
-    /// clocks: Reference from Board.CLOCKS,
+    /// clocks: Reference from &microbit::hal::Clocks::new(board.clocks).enable_ext_hfosc(),
+    /// (you will get a reference error if you dont initialize this beforehand)
     ///     
     /// channel: What channel you want the radio to listen in on
+    /// 
+    /// password: What the password should be 
     ///     
     /// timeout: How long IN MICROSECONDS do you want to wait to recieve something 
     /// 
@@ -112,13 +118,13 @@ impl CalverCruisersStandardRadio<'_> {
         channel:ieee802154::Channel,
         password:[u8;4],
         timeout:u32
-    ) -> CalverCruisersStandardRadio<'a> {  
+    ) -> CalverCruisersStandardRecieverRadio<'a> {  
 
         let mut radio: microbit::hal::ieee802154::Radio<'a> = microbit::hal::ieee802154::Radio::init(board_radio, &clocks);
         
         radio.set_channel(channel);
   
-        return CalverCruisersStandardRadio { controller:  radio, timeout, password};
+        return CalverCruisersStandardRecieverRadio { controller:  radio, timeout, password};
     }
 
     /// tries to read a radio packet and writes it to the serial monitor 
@@ -210,14 +216,14 @@ impl CalverCruisersStandardRadio<'_> {
             Serial::write(serial,"Reading Radio Packet to Buffer", crate::utils::serial::MessageSeverity::INFORMATIVE);
             // write!(serial, "! Packet may have been modified. Packet:").unwrap();
 
-            return CalverCruisersStandardRadio::read_message_with_password(self.password, packet,true);
+            return CalverCruisersStandardRecieverRadio::read_message_with_password(self.password, packet,true);
             
         }
         else {
             // write!(serial, "Packet:").unwrap();
             Serial::write(serial,"Reading Radio Packet to Buffer", crate::utils::serial::MessageSeverity::INFORMATIVE);
 
-            return CalverCruisersStandardRadio::read_message_with_password(self.password, packet, false);
+            return CalverCruisersStandardRecieverRadio::read_message_with_password(self.password, packet, false);
         }
 
 
@@ -268,6 +274,109 @@ impl CalverCruisersStandardRadio<'_> {
     /// Read the packet and attempt to identify what the challenge is apart of 
     pub fn read_and_identify_package(&mut self,timer: &mut Timer<TIMER0>,serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) -> Result<RadioRecievedMessages, RadioError>{
         Serial::write(serial,"Attempting to read a broadcasted message to serial monitor", crate::utils::serial::MessageSeverity::INFORMATIVE);
+        let mut packet = Packet::new();
+        let mut message_buf = [0_u8;20];
+
+        match self.controller.recv_timeout(&mut packet, timer, self.timeout) {
+            Ok(_) => {
+                // do nothing
+            },
+            Err(e) => {
+                match e {
+                    ieee802154::Error::Crc(_) => {
+                        return Err(ModifiedMessageErr)
+                    },
+                    ieee802154::Error::Timeout => {
+                        return Err(RadioError::Timeout)
+                    },
+                }
+            },
+        }
+
+        let mut message_ptr = 0;
+        let mut packet_iter = packet.iter();
+
+        // check to see if the password is right
+        for _ in 0..4 {
+            let m = match packet_iter.next() {
+                Some(x) => x,
+                None => {
+                    return Err(RadioError::BadMessageLength)
+                },
+            };
+
+            if m == &self.password[message_ptr] {
+                message_buf[message_ptr] = *m;
+                message_ptr += 1;
+                continue;
+            }
+            else {
+                return Err(IncorrectPassword)
+            }
+
+        }
+
+        // fill the rest of the message in after we've checked for the password
+        for _ in 0..16 {
+            match packet_iter.next() {
+                Some(x) => {
+                    message_buf[message_ptr] = *x;
+                    message_ptr += 1;
+                },
+                None => {
+                    return Err(RadioError::BadMessageLength)
+                },
+            }
+        }
+
+        // try to identify what the message is and return stuff accordingly
+        match message_buf[6] {
+            IR_SENSOR_IDENTIFIER => {
+                return Ok(RecievedIrMessage(
+                    LeftIRValue(i16::from_le_bytes([message_buf[7],message_buf[8]])),
+                    RightIRValue(i16::from_le_bytes([message_buf[9],message_buf[10]]))
+                ))
+            },
+            RADIO_MESSAGE_IDENTIFIER => {
+                let mut radio_message = [0_u8;11];
+                radio_message.copy_from_slice(&message_buf[7..18]);
+                return Ok(RadioRecievedMessages::RecievedRadioMessage(
+                    radio_message
+                ))
+            },
+            MAGNOMETER_MESSAGE_IDENTIFIER => {
+                return Ok(RadioRecievedMessages::RecievedMagnometerMessage(
+                    XValue(i16::from_le_bytes([message_buf[7],message_buf[8]])),
+                    YValue(i16::from_le_bytes([message_buf[9],message_buf[10]])),
+                    ZValue(i16::from_le_bytes([message_buf[11],message_buf[12]]))
+                ))
+            },
+            ULTRASONIC_DISTANCE_SENSOR_IDENTIFIER => {
+                return Ok(
+                    RadioRecievedMessages::RecievedUDSMessage(
+                        u32::from_le_bytes([
+                            message_buf[7],
+                            message_buf[8],
+                            message_buf[9],
+                            message_buf[10],
+                        ])
+                    )
+                )
+            }
+            _ => {
+                // unknown
+                let mut unk_message = [0_u8;16];
+                unk_message.copy_from_slice(&message_buf[4..20]);
+                return Ok(
+                    RadioRecievedMessages::Unknown(
+                        unk_message
+                    )
+                )
+            }
+        }
+    }
+
+    pub fn read_and_identify_package_nolog(&mut self,timer: &mut Timer<TIMER0>,serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>) -> Result<RadioRecievedMessages, RadioError>{ 
         let mut packet = Packet::new();
         let mut message_buf = [0_u8;20];
 

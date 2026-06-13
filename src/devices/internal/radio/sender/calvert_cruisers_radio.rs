@@ -29,13 +29,13 @@ pub enum RadioError {
 /// * CCSR Passwords are 4 bytes rather than 3 bytes 
 /// * CCSR can only send messages if they come from a source that implements [INSERT MESSAGEFORMAT TRAIT]
 /// * CCSR sends messages in 20 byte messages rather versus the 16 byte long messages sent with Radio
-pub struct CalverCruisersStandardRadio<'a> {
+pub struct CalvertCruisersStandardSenderRadio<'a> {
     controller:microbit::hal::ieee802154::Radio<'a>,
     password:[u8;PASSWORDLENGTH],
     timeout:u32,
 }
 
-impl CalverCruisersStandardRadio<'_> {
+impl CalvertCruisersStandardSenderRadio<'_> {
 
 
     /// Initialize the radio.
@@ -44,9 +44,12 @@ impl CalverCruisersStandardRadio<'_> {
     ///     
     /// board_radio: From Board.RADIO,
     ///     
-    /// clocks: Reference from Board.CLOCKS,
+    /// clocks: Reference from &microbit::hal::Clocks::new(board.clocks).enable_ext_hfosc(),
+    /// (you will get a reference error if you dont initialize this beforehand)
     ///     
     /// channel: What channel you want the radio to listen in on
+    /// 
+    /// password: What the password should be 
     ///     
     /// timeout: How long IN MICROSECONDS do you want to wait to recieve something 
     /// 
@@ -58,7 +61,7 @@ impl CalverCruisersStandardRadio<'_> {
         password:[u8;PASSWORDLENGTH],
         timeout:u32,
         serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>
-    ) -> CalverCruisersStandardRadio<'a> {
+    ) -> CalvertCruisersStandardSenderRadio<'a> {
 
         Serial::write(serial, "Starting Radio Configured As A Sender", crate::utils::serial::MessageSeverity::INFORMATIVE);
         
@@ -69,7 +72,7 @@ impl CalverCruisersStandardRadio<'_> {
 
         
         
-        return CalverCruisersStandardRadio { controller:  radio, timeout,password};
+        return CalvertCruisersStandardSenderRadio { controller:  radio, timeout,password};
     }
 
     /// Initialize the radio.
@@ -78,9 +81,12 @@ impl CalverCruisersStandardRadio<'_> {
     ///     
     /// board_radio: From Board.RADIO,
     ///     
-    /// clocks: Reference from Board.CLOCKS,
+    /// clocks: Reference from &microbit::hal::Clocks::new(board.clocks).enable_ext_hfosc(),
+    /// (you will get a reference error if you dont initialize this beforehand)
     ///     
     /// channel: What channel you want the radio to listen in on
+    /// 
+    /// password: What the password should be 
     ///     
     /// timeout: How long IN MICROSECONDS do you want to wait to recieve something 
     /// 
@@ -91,7 +97,7 @@ impl CalverCruisersStandardRadio<'_> {
         channel:ieee802154::Channel,
         password:[u8;PASSWORDLENGTH],
         timeout:u32
-    ) -> CalverCruisersStandardRadio<'a> {
+    ) -> CalvertCruisersStandardSenderRadio<'a> {
 
         let mut radio: microbit::hal::ieee802154::Radio<'a> = microbit::hal::ieee802154::Radio::init(board_radio, &clocks);
         
@@ -99,7 +105,7 @@ impl CalverCruisersStandardRadio<'_> {
 
 
         
-        return CalverCruisersStandardRadio { controller:  radio, timeout,password};
+        return CalvertCruisersStandardSenderRadio { controller:  radio, timeout,password};
     }
 
     /// tries to write bytes to the Radio
