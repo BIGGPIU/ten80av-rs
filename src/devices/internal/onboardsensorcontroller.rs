@@ -78,8 +78,6 @@ impl OnboardSensorController {
     }
 
     
-    /// this one is a weird one, it exists mainly due to rusts ownership rules.
-    /// 
     /// This first frees the pins up from the MagnometerAccelerometerController instance (meaning that you 
     /// wont be able to use the Magnometer/Accelerometer until you use ServoMotorController::into_magnometer_accelerometer)
     /// 

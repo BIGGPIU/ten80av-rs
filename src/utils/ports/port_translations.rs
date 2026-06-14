@@ -197,7 +197,7 @@ pub struct MotorPort {
 
 
 
-pub enum MicrobitDriverIOPorts {
+enum MicrobitDriverIOPorts {
     Pin0,
     Pin1,
     Pin2,

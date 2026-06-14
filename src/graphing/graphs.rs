@@ -7,6 +7,17 @@ const MAXITEMSINITEMVEC:usize = 50;
 
 pub struct Graphing;
 
+/// what size do you want the y axis of your graph to be.
+/// 
+/// the max y values for all the options are:
+/// 
+/// | Xsmall | 100      |
+/// |--------|----------|
+/// | Small  | 1000     |
+/// | Medium | 2000     |
+/// | Large  | 4000     |
+/// | XLarge | 10,000   |
+/// | Full   | u32::Max |
 pub enum GraphSize {
     XSmall,
     Small,
@@ -31,7 +42,7 @@ impl Into<u32> for GraphSize {
 
 
 #[derive(Debug,Clone)]
-pub enum BroadcastMessages {
+enum BroadcastMessages {
     /// Remove(index)
     Remove(usize),
     // Update(index,value)
@@ -92,6 +103,7 @@ pub struct ItemQueue {
     broadcast_writer:tokio::sync::broadcast::Sender<BroadcastMessages>
 }
 
+/// this mostly does nothing.
 pub struct ItemQueueReader {
     broadcast_reader:tokio::sync::broadcast::Receiver<BroadcastMessages>
 }
@@ -144,7 +156,7 @@ impl Graphing {
         )
     }
 
-    /// creates a window.
+    /// creates a window with a graph and starts to update it with new information.
     /// 
     /// The arguments to this function can be retrieved through Graphing::make_window
     pub fn spawn_window(window:eframe::NativeOptions,broadcast_reader: ItemQueueReader, graph_size:GraphSize){ 

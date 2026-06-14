@@ -1,4 +1,4 @@
-use core::ptr::{addr_of_mut, write_bytes};
+use core::ptr::{addr_of_mut};
 use core::fmt;
 use embedded_io::Write;
 use microbit::{hal::uarte::{self, Error, Instance, Uarte, UarteRx, UarteTx}, pac::{UARTE0}};

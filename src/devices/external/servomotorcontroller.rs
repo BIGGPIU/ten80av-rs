@@ -161,8 +161,6 @@ impl ServoMotorController {
         self.controller.destroy().free()
     }
     
-    /// this one is a weird one, it exists mainly due to rusts ownership rules.
-    /// 
     /// This first frees the pins up from the servoController instance (meaning that you 
     /// wont be able to use the servocontroller until you use MagnometerAccelerometerController::into_servomotor)
     /// 
