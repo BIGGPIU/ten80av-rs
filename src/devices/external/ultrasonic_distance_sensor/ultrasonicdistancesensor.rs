@@ -5,6 +5,9 @@ use embedded_hal::{delay::DelayNs, digital::{InputPin, OutputPin}};
 use microbit::{hal::{ Timer, gpio::{Input, Output, PullUp, PushPull}}, pac::{TIMER0}};
 
 use crate::utils::serial::Serial;
+#[cfg(feature = "calcru-serial-standard")]
+use crate::utils::UltraSonicDistanceSensorMessage;
+
 
 pub enum UltrasonicDistanceSensorError {
     Timeout,
@@ -64,6 +67,29 @@ impl UltraSonicDistanceSensor {
     }    
 
 
+
+    #[cfg(feature = "calcru-serial-standard")]
+    /// the same as measure_raw but it serializes straight into a message you can send through radio
+    pub fn measure_into_message(&mut self, timer:&mut Timer<TIMER0>) ->  Result<UltraSonicDistanceSensorMessage,UltrasonicDistanceSensorError> {
+        self.send_trigger_pulse(timer);
+
+        let _echo_start = match self.wait_for_echo_start(timer) {
+            Ok(x) => x,
+            Err(_) => {
+                // write!(serial,"error: {e:?} \r\n").unwrap();
+                return Err(UltrasonicDistanceSensorError::Timeout)
+            },
+        };
+
+        let pulse_width = match self.wait_for_echo_end(timer) {
+            Ok(x) => x,
+            Err(_e) => { 
+                return Err(UltrasonicDistanceSensorError::Timeout)
+            },
+        };
+
+        return Ok(UltraSonicDistanceSensorMessage::new_with_values(pulse_width))
+    }
 
     /// Measure the amount of time its takes for the UltraSonicDistanceSensor to detect an object
     pub fn measure_raw(&mut self, timer:&mut Timer<TIMER0>) -> Result<u32,UltrasonicDistanceSensorError> {
@@ -167,6 +193,13 @@ impl UltraSonicDistanceSensor {
 
         return distance_cm
 
+    }
+
+    #[cfg(feature = "calcru-serial-standard")]
+    /// Creates a message with the UDS Current value (not in centimeters). this message can then be used to be sent over the Radio or to a computer through the
+    /// serial (UART)
+    pub fn create_ultrasonic_distance_sensor_message(&mut self, timer:&mut Timer<TIMER0>) -> Result<UltraSonicDistanceSensorMessage,UltrasonicDistanceSensorError> {
+        Ok(UltraSonicDistanceSensorMessage::new_with_values(self.measure_raw(timer)?))
     }
 
 }

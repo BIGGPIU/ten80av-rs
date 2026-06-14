@@ -1,6 +1,8 @@
 use microbit::hal::saadc::Channel;
 
 use crate::utils::serial::Serial;
+#[cfg(feature = "calcru-serial-standard")]
+use crate::utils::{IRSensorMessagePart};
 
 /// Controller for External IR Sensors
 pub struct IRSensor<T>
@@ -10,6 +12,7 @@ where T: microbit::hal::saadc::Channel
     channel:T,
     offset:i16,
 }
+
 
 
 
@@ -49,8 +52,17 @@ impl<T:Channel> IRSensor<T> {
         }
     }
 
+    #[cfg(feature = "calcru-serial-standard")]
+    /// the same as IRSensor::measure except it returns a message that can be sent over Serial or Radio
+    pub fn measure_into_message(&mut self, controller: &mut crate::devices::external::analogdevicecontroller::AnalogDeviceController) -> IRSensorMessagePart {
+        return IRSensorMessagePart { ir_value: controller.controller.read_channel(&mut self.channel).unwrap() - self.offset }
+    }
 
-
+    #[cfg(feature = "calcru-serial-standard")]
+    /// the same as IRSensor::measure_no_offset except it returns a message that can be sent over Serial or Radio.
+    pub fn measure_raw_into_message(&mut self, controller: &mut crate::devices::external::analogdevicecontroller::AnalogDeviceController) -> IRSensorMessagePart {
+        return IRSensorMessagePart { ir_value: controller.controller.read_channel(&mut self.channel).unwrap()}
+    }
 
     /// Measure the raw value of the IR Sensor minus the offset
     pub fn measure(&mut self, controller: &mut crate::devices::external::analogdevicecontroller::AnalogDeviceController) -> i16{
@@ -61,4 +73,6 @@ impl<T:Channel> IRSensor<T> {
     pub fn measure_no_offset(&mut self, controller: &mut crate::devices::external::analogdevicecontroller::AnalogDeviceController) -> i16{
         controller.controller.read_channel(&mut self.channel).unwrap()
     }
+
+    
 }

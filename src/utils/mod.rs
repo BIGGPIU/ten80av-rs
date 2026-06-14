@@ -58,5 +58,10 @@
 
 
 pub mod serial;
+    mod serial_structs;
+    #[cfg(not(feature = "calcru-serial-standard"))]
+    pub use serial_structs::MicrobitMessageFormat;
+    #[cfg(feature = "calcru-serial-standard")]
+    pub use serial_structs::*; 
 pub mod ports;
 pub mod display;

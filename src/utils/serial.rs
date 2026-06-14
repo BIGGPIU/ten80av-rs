@@ -1,7 +1,9 @@
-use core::ptr::addr_of_mut;
+use core::ptr::{addr_of_mut};
 use core::fmt;
+use embedded_io::Write;
 use microbit::{hal::uarte::{self, Error, Instance, Uarte, UarteRx, UarteTx}, pac::{UARTE0}};
-use core::fmt::Write;
+
+use crate::utils::serial_structs::MicrobitMessageFormat;
 
 static mut TX_BUF:[u8;1] = [0;1];
 static mut RX_BUF:[u8;1] = [0;1];
@@ -60,6 +62,9 @@ pub struct Serial {
 }
 
 
+
+
+
 /// How severe is the message you're writing
 pub enum MessageSeverity {
     /// for when you're writing to the console just to write to the console
@@ -89,6 +94,12 @@ impl Serial {
                 write!(serial, "[INFO] {message:?}\r\n").unwrap();
             },
         }
+    }
+
+    /// sends standardized data over the serial port. Primarily useful for sending data to a computer a Micro:bit is connected to 
+    pub fn send_data_over_uart(serial:&mut crate::utils::serial::UartePort<microbit::pac::UARTE0>,message:&impl MicrobitMessageFormat) {
+        // todo : keep writing the message of serial implementations for the functions 
+        serial.write_all(&message.create_message_slice()).unwrap();
     }
 
     /// write but for people who like there to be as little arguments as possible 

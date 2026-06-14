@@ -14,3 +14,5 @@
         - [How Do Our Motors Work?](./3-making-your-library/5-programming-motors/1-how-do-our-motors-work/explanation.md)
         - [Programming the Acceleration Motor](./3-making-your-library/5-programming-motors/2-programming-accleration-motor/acceleration.md)
         - [Programming the Turning Motor](./3-making-your-library/5-programming-motors/3-programming-turning-motor/turning.md)
+- [Using Ten80av-rs](./4-using-ten80av-rs/intro.md)
+    - [Getting Started](./4-using-ten80av-rs/1-getting-started/startingout.md)

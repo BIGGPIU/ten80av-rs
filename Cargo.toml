@@ -4,16 +4,27 @@ authors = ["Diya Shakoor", "Calvert Cruisers Ten80 Team"]
 description = "A modular library for programming Ten80 Autonomous Vehicles."
 repository = "https://github.com/BIGGPIU/ten80av-rs"
 license = "GPL-3.0"
-keywords = ["robitics", "ten80"]
+keywords = ["robotics", "ten80"]
 homepage = "https://github.com/BIGGPIU/ten80av-rs"
 readme = "README.md"
-version = "1.1.0"
+version = "2.0.0"
 edition = "2024"
 
 [dependencies]
+eframe = { version = "0.34.3", optional = true }
+egui = {version = "0.34.3", optional = true}
+egui_plot = {version = "0.35.0", optional = true}
 embedded-hal = "1.0.0"
 embedded-io = "0.7.1"
 lsm303agr = "1.1.0"
 microbit-v2 = "0.16.0"
 micromath = { version = "2.1.0", features = ["num-traits"] }
 pwm-pca9685 = "1.0.0"
+serial = {version = "0.4.0", optional = true}
+tokio = { version = "1.52.3", features = ["sync"], optional = true }
+
+[features]
+std = []
+graphing = ["std","serial","tokio","egui","egui_plot","eframe"]
+calcru-serial-standard = []
+
